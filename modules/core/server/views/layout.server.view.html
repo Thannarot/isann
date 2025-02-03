@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html data-framework="angularjs">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=1024">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+	<style type="text/css">
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak {
+			display: none !important;
+		}
+	</style>
+
+	<base href="/">
+	<title>{{title}}</title>
+	<meta name="description" content="{{description}}">
+	<meta name="fragment" content="!">
+	<meta name="keywords" content="{{keywords}}">
+	<link href="{{favicon}}" rel="shortcut icon" type="image/x-icon">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+
+	<!-- Application CSS Files -->
+	{% for cssFile in cssFiles %}
+	<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
+	<!-- Select 2  -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div ng-cloak>
+		<!-- <div ng-include src="modules/navigation/client/views/navigation.client.view.html"></div> -->
+		<div>
+			{% block main_container %} {% endblock %}
+		</div>
+	</div>
+
+	<!--Embedding The User Object-->
+	<script type="text/javascript">
+		var user = {{ user | json | safe }};
+	</script>
+
+	<!--Load The Socket.io File-->
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	{% for jsFile in jsFiles %}
+	<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
+	<!-- Select 2  -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+	<!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+	{% if livereload %}
+	{% endif %}
+</body>
+
+</html>

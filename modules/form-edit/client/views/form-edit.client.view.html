@@ -1,0 +1,200 @@
+<div ui-view="nav"></div>
+<div ng-controller="formEditCtl">
+<div class="container dark-bg" style="margin-bottom: 50px;">
+  <br>
+  <h2>แบบฟอร์มนำเข้าข้อมูล</h2>
+  <br>
+  <form class="form-horizontal" >
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pname">ชื่อสถานที่:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pname"  name="pname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pname">รูปภาพประกอบ:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="imgfeatured"  name="imgfeatured">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="ptype_selector">ประเภทสถานที่:</label>
+      <div class="col-sm-8">
+        <select class="form-control" id="ptype_selector">
+          <option value="">กรุณาเลือก</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="plocation">ที่ตั้ง:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="plocation"  name="plocation">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="plat">ละติจูด:</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" id="plat" name="plat">
+      </div>
+      <label class="control-label col-sm-2" for="plng">ลองจิจูด:</label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" id="plng" name="plng">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pcity">จังหวัด:</label>
+      <div class="col-sm-2">
+        <select type="text" class="form-control" id="pprovince" name="pprovince" required>
+          <option value="9999">กรุณาเลือก</option>
+        </select>
+      </div>
+
+      <label class="control-label col-sm-2" for="pcity">อำเภอ:</label>
+      <div class="col-sm-2">
+        <select type="text" class="form-control" id="pcity" name="pcity" required>
+          <option value="9999">กรุณาเลือก</option>
+        </select>
+      </div>
+
+      <label class="control-label col-sm-2" for="ptownship">ตำบล:</label>
+      <div class="col-sm-2">
+        <select type="text" class="form-control" id="ptownship" name="ptownship" required>
+          <option value="9999">กรุณาเลือก</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pdesc">ความเป็นมา:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pdesc"  name="pdesc">
+      </div>
+    </div>
+    <div class="form-group" id="input-entrance_fee">
+      <label class="control-label col-sm-4" for="pentranfee">อัตราค่าบริการ:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pentranfee"  name="pentranfee">
+      </div>
+    </div>
+    <div class="form-group" id="input-shop">
+      <label class="control-label col-sm-4" for="pshop">ร้านค้าสวัสดิการ:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pshop"  name="pshop">
+      </div>
+    </div>
+    <div class="form-group" id="input-cellular">
+      <label class="control-label col-sm-4" for="pcell">สัญญาณโทรศัพท์:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pcell"  name="pcell">
+      </div>
+    </div>
+    <div class="form-group" id="input-agency">
+      <label class="control-label col-sm-4" for="pagency">หน่วยงานที่เกี่ยวข้อง:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pagency"  name="pagency">
+      </div>
+    </div>
+
+    <div class="form-group" id="input-agency">
+      <label class="control-label col-sm-4" for="facilities_selects">สิ่งอำนวยความสะดวก:</label>
+      <div class="col-sm-8">
+        <select class="js-example-basic-multiple" id="facilities_selects" name="facilities_selects[]" multiple="multiple" style="width: 100%;" required>
+          <option value="01">มีที่จอดรถ</option>
+          <option value="02">ทางลาดยาว ความชันไม่เกิน 4.76 องศาและมีราวจับ</option>
+          <option value="03">ห้องน้ำและห้องส้วม สามารถเปิดปิดได้ง่ายและมีราวจับ</option>
+          <option value="04">ห้องน้ำและห้องส้วม พื้นไม่ลื่น</option>
+          <option value="05">มีป้ายสัญลักษณ์ชัดเจน มองเห็นได้ง่าย</option>
+          <option value="06">มีที่นั่งพัก ทุกระยะ 200เมตร</option>
+          <option value="07">มีบริการที่เก้าอี้เข็น</option>
+          <option value="08">มียาสามัญประจำบ้าน อุปกรณ์ปฐมพยาบาลสำหรับผู้สูงอายุ ที่ไม่หมดอายุและจัดเตรียมไว้ในจุดที่เหมาะสม</option>
+          <option value="09">มีตำแหน่งใกล้กับสถานพยาบาลสมารถให้บริการได้อย่างมีประสิทธิภาพและรวดเร็ว</option>
+          <option value="10">มีหน่วยพยาบาล ห้องพยาบาล</option>
+          <option value="11">มีบริการเคลื่อนย้ายผู้สูงอายุ</option>
+          <option value="12">มีลิฟต์ หรือบันได้ที่อำนวยความสะดวก</option>
+          <option value="13">มีการเข้าถึงอินเตอร์เน็ต</option>
+          <option value="14">มีห้องพักใกล้บันไดหนีไฟ หรือลิฟต์</option>
+          <option value="15">ห้องพักมีสัญญานบอกเหตุ หรือเตือนภัย</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" id="input-agency">
+      <label class="control-label col-sm-4" for="pfacilities">สิ่งอำนวยความสะดวก:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pfacilities"  name="pfacilities">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="ptravel">การเดินทาง:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="ptravel"  name="ptravel">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pcontact">ติดต่อ:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pcontact"  name="pcontact">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pmap">แผนที่:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pmap"  name="pmap">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pphotosource">ที่มาของรูป:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pphotosource"  name="pphotosource">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pinfosource">ที่มาของข้อมูล:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pinfosource"  name="pinfosource">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pextrasource">ลิงค์ใส่รูปเพิ่มเติม:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="pextrasource"  name="pextrasource">
+      </div>
+    </div>
+    <!-- <div class="form-group">
+      <label class="control-label col-sm-4" for="paudio">ไฟล์เสียง:</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="paudio"  name="paudio">
+      </div>
+    </div> -->
+    <div class="form-group">
+      <label class="control-label col-sm-4" for="pextrasource">คะแนน:</label>
+      <div class="col-sm-8">
+        <select type="text" class="form-control" id="prating" name="prating">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <hr>
+    <div class="form-group text-center">
+      <div class="col-sm-offset-2 col-sm-8">
+        <button id="form_edit_submit_btn"  class="btn btn-success">บันทึก</button>
+        <button id="form_edit_cancel" type="submit" class="btn btn-danger">ยกเลิก</button>
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+  </form>
+</div>
+</div>
+
+<div ui-view="footer"></div>

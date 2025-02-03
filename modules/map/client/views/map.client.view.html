@@ -1,0 +1,174 @@
+<div ui-view="nav"></div>
+<div id="map-container">
+  <div ng-controller="mapCtrl">
+    
+    <div id="menuSidenav" class="sidenav sidenav-left">
+      <a href="javascript:void(0)" id="menu-close-btn" class="closebtn">&times;</a>
+      <div class="searching-form">
+        <div class="form-group">
+          <label for="exampleInputEmail1">ชื่อสถานที่</label>
+          <input type="text" class="form-control" id="pname" placeholder="พิมพ์ชื่อสถานที่">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">จังหวัด</label>
+          <select class="form-control" id="province_selector">
+            <option value="9999">ทั้งหมด</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">อำเภอ</label>
+          <select class="form-control" id="city_selector">
+            <option value="9999">ทั้งหมด</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">ตำบล</label>
+          <select class="form-control" id="township_selector">
+            <option value="9999">ทั้งหมด</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">ประเภทของสถานที่</label>
+          <select class="form-control" id="type_selector">
+            <option value="9999">ทั้งหมด</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">ระยะห่างจากตำแหน่งของท่าน (กิโลเมตร)</label>
+          <div class="divSlider">
+            <div style="width:95%; margin:3px;">
+              <input type="text" class="js-range-slider" id="slider-distance" name="slider-distance" />
+            </div>
+          </div>
+        </div>
+        <!-- <div class="form-group">
+          <label for="exampleInputPassword1">คะแนนความพึงพอใจ</label>
+          <div class="divSlider">
+            <div style="width:95%; margin:3px;">
+              <input type="text" class="js-range-slider" id="slider-rating" name="slider-rating" />
+            </div>
+          </div>
+        </div> -->
+        <input type="text" class="" id="geo-lat" name="geo-lat" hidden />
+        <input type="text" class="" id="geo-lng" name="geo-lng" hidden />
+
+        <hr>
+        <button type="submit" id="filter-btn" class="btn btn-primary">ค้นหาสถานที่</button>
+        <button type="submit" id="filter-all-btn" class="btn btn-primary" style="float:right;">แสดงทั้งหมด</button>
+
+      </div>
+    </div>
+
+    <div id="sidenav-table" class="sidenav sidenav-right">
+      <div class="table-items">
+        <label>รายชื่อสถานที่</label><span style="float:right;" id="found-no"></span>
+        <span class="closebtn" id="table-close">&times;</span>
+        <ul id="tableList"></ul>
+      </div>
+    </div>
+
+    <div id="detail-panel" class="sidenav detail-right">
+      <span class="closebtn" id="detail-close">&times;</span>
+      <div class="table-detail">
+      </div>
+    </div>
+
+
+    <div class="main">
+      <div id="map" style="width: 100%;height: 600px;">
+        <div class="control-panel map-component">
+          <div class="scalebar-container"></div>
+          <ul>
+            <li class="zoom-in pointer" id="zoom-in">
+              <svg class="panel-icon">
+                <use xlink:href="#icon-plus">
+                  <svg id="icon-plus" viewBox="0 0 1024 1024">
+                    <title>Zoom In</title>
+                    <path
+                      d="M573.44 245.76h-122.88v204.8h-204.8v122.88h204.8v204.8h122.88v-204.8h204.8v-122.88h-204.8v-204.8z"
+                      class="path1"></path>
+                  </svg>
+                </use>
+              </svg>
+            </li>
+            <li class="zoom-in pointer" id="zoom-out">
+              <svg class="panel-icon">
+                <svg id="icon-minus" viewBox="0 0 1024 1024">
+                  <title>Zoom Out</title>
+                  <path d="M778.24 573.44h-532.48v-122.88h532.48v122.88z" class="path1"></path>
+                </svg>
+              </svg>
+            </li>
+            <li class="zoom-in pointer" id="geolocate">
+              <svg class="panel-icon">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-cursor" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103zM2.25 8.184l3.897 1.67a.5.5 0 0 1 .262.263l1.67 3.897L12.743 3.52 2.25 8.184z" />
+                </svg>
+              </svg>
+            </li>
+          </ul>
+        </div>
+
+        <div class="control-layer map-component">
+          <div class="scalebar-container"></div>
+          <ul>
+            <li class="pointer active" id="streets-v11">
+              <svg class="panel-icon">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-columns" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M15 2H1v12h14V2zM1 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H1z" />
+                  <path fill-rule="evenodd" d="M7.5 14V2h1v12h-1zm0-8H1V5h6.5v1zm7.5 5H8.5v-1H15v1z" />
+                </svg>
+              </svg>
+              <span>Streets</span>
+            </li>
+            <li class="pointer" id="light-v10">
+              <svg class="panel-icon">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-circle" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                </svg>
+              </svg>
+              <span>Light</span>
+            </li>
+            <li class="pointer" id="dark-v10">
+              <svg class="panel-icon">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-circle-half" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15V1a7 7 0 1 1 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+                </svg>
+              </svg>
+              <span>Dark</span>
+            </li>
+            <li class="pointer" id="satellite-v9">
+              <svg class="panel-icon">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-map" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M15.817.613A.5.5 0 0 1 16 1v13a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 14.51l-4.902.98A.5.5 0 0 1 0 15V2a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0l4.902.98 4.902-.98a.5.5 0 0 1 .415.103zM10 2.41l-4-.8v11.98l4 .8V2.41zm1 11.98l4-.8V1.61l-4 .8v11.98zm-6-.8V1.61l-4 .8v11.98l4-.8z" />
+                </svg>
+              </svg>
+              <span>Satellite</span>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+      <div class="branding">
+        <p>ค้นหาสถานที่</p>
+      </div>
+
+      <div class="table-view" id="table-open">
+        <p>ตารางแสดงผล</p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div ui-view="footer"></div>

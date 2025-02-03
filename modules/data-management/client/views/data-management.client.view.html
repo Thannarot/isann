@@ -1,0 +1,50 @@
+<div ui-view="nav"></div>
+<div ng-controller="managementCtl">
+  <div class="container dark-bg">
+    <h2 class='mb-3'>ระบบจัดการข้อมูล</h2>
+    <div class="flex">
+      <a href="/form-add" class="btn btn-default">เพิ่มข้อมูล</a>
+      <!-- <a href="/map" class="btn btn-info">หน้าแผนที่</a> -->
+      <a href="https://html-online.com/editor/" class="btn btn-warning" target="_blank">Text Editor</a>
+    </div>
+
+  
+    <table id="dtBasicExample" class="table" width="100%">
+      <thead>
+        <tr>
+          <th class="th-sm">สถานที่
+          </th>
+          <th class="th-sm">สถานที่ตั้ง
+          </th>
+          <th class="th-sm">ละติจูด
+          </th>
+          <th class="th-sm">ลองจิจูด
+          </th>
+          <th class="th-sm">ดำเนินการ
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="x in placeList">
+          <td>[[x.name]]</td>
+          <td>[[x.location]]</td>
+          <td>[[x.lat]]</td>
+          <td>[[x.lng]]</td>
+          <td>
+            <a href="/form-edit/pid=[[x.pid]]" class="btn btn-default btn-sm">Edit</a>
+            <a href="#" class="btn btn-danger btn-sm btn-delete" data-pid="[[x.pid]]">Delete</a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <select class="" id="table-status" hidden>
+      <option value="0"></option>
+      <option value="1"></option>
+    </select>
+
+  </div>
+</div>
+
+<div ui-view="footer"></div>

@@ -1,0 +1,21 @@
+<div ui-view="nav"></div>
+<div class="container" ng-controller="AdminLoginController" style="justify-content: center; display: flex; margin-top: 100px;">
+    <div class="login-container">
+        <div class="header">
+            ADMIN LOGIN
+            <div class="subtext">Hello there, Sign in and start managing your website</div>
+        </div>
+        <form ng-submit="login()">
+            <div class="login-form">
+                <div class="input-group">
+                    <input type="password" placeholder="Password" ng-model="admin.password" required>
+                    <i>🔒</i>
+                </div>
+                <button class="login-btn" type="submit">LOGIN →</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div ui-view="footer"></div>

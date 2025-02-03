@@ -1,0 +1,522 @@
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3001
+Database: undefined
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3001
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chanddddb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3003
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3003
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3005
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3005
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3006
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3007
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3008
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3009
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3009
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3010
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: postgres
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3011
+Database: postgres
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3001
+Database: postgres
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3003
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3005
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3005
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3006
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3007
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3007
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3001
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+Ma Chan - Development Environment
+Environment: development
+Port: 3003
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3005
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3006
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3006
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3006
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3001
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3002
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3003
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3004
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3007
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3008
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3009
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3010
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3011
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3012
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3013
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3014
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3015
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3016
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3017
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3018
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3019
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3020
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3021
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3022
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3023
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3024
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3025
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3026
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3027
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3028
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3028
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3029
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3030
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3031
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3032
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3032
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3032
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3033
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3034
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3034
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+E-La - Development Environment
+Environment: development
+Port: 3034
+Database: chandb
