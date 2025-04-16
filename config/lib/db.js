@@ -1,13 +1,6 @@
 'use strict';
 const config = require('../config');
-const pgp = require('pg-promise')({
-    connect: (client) => {
-        console.log('Connected to PostgreSQL server.');
-    },
-    error: (err) => {
-        console.error('Error in PostgreSQL connection:', err);
-    }
-});
+const pgp = require('pg-promise')();
 
 const dbconfig = {
     database: config.db.options.database,

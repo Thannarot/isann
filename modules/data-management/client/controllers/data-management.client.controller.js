@@ -12,19 +12,17 @@ angular.module('home').controller('managementCtl', function ($scope, $state, $ht
 
 	$scope.placeList = [];
 
-	var apiCall = function (url, method) {
-		//console.log(method, url);
+	var apiCall = function (url, method, data) {
 		return $http({
 			method: method,
 			url: url,
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	};
-
 	$scope.fetchPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'get-places' });
 		// Make a request
-		apiCall(getPleaceURL, 'POST').then(
+		apiCall('/get-places', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 

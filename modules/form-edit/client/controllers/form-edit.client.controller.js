@@ -13,19 +13,18 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 	var pprovince = "";
 	var pcity = "";
 	var ptownship = "";
-	var apiCall = function (url, method) {
-		//console.log(method, url);
+	var apiCall = function (url, method, data) {
 		return $http({
 			method: method,
 			url: url,
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	};
 
 	$scope.listProvinceOptions = function () {
-		var cityOptionsURL = '/' + $.param({ action: 'get-province-list' });
 		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+		apiCall('get-province-list', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
@@ -45,22 +44,21 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 
 	$scope.listCityOptions = function () {
-		const prov_id = $('#pprovince').val();
-		console.log(prov_id);
-		var cityOptionsURL = '/' + $.param({ action: 'get-city-list', prov_id: prov_id });
+		const prov_id = $("#pprovince option:selected").val();
 		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+		apiCall('get-city-list', 'POST', {prov_id: prov_id}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
 				$('#pcity').html('');
-				$('#pcity').append('<option value="9999">ทั้งหมด</option>');
+				$('#pcity').append('<option value="">ทั้งหมด</option>');
 				$.each(items, function (i, item) {
 					$('#pcity').append($('<option>', {
 						value: item.id_2,
 						text: item.name_2
 					}));
 				});
+				$('#pcity option[value="' + pcity + '"]').attr("selected", "selected").change();
 			},
 			function (error) {
 				// Error Callback
@@ -71,21 +69,20 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 	$scope.listTownshipOptions = function () {
 		const dist_id = $('#pcity').val();
-		console.log(dist_id);
-		var townshipOptionsURL = '/' + $.param({ action: 'get-township-list', dist_id:dist_id });
 		// Make a request
-		apiCall(townshipOptionsURL, 'POST').then(
+		apiCall('get-township-list', 'POST', {dist_id: dist_id}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
 				$('#ptownship').html('');
-				$('#ptownship').append('<option value="9999">ทั้งหมด</option>');
+				$('#ptownship').append('<option value="">ทั้งหมด</option>');
 				$.each(items, function (i, item) {
 					$('#ptownship').append($('<option>', {
 						value: item.id_3,
 						text: item.name_3
 					}));
 				});
+				$('#ptownship option[value="' + ptownship + '"]').attr("selected", "selected");
 			},
 			function (error) {
 				// Error Callback
@@ -96,9 +93,8 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 
 	$scope.listPlaceTypeOptions = function () {
-		var typeOptionsURL = '/' + $.param({ action: 'get-placetype-list' });
 		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('get-placetype-list', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
@@ -118,8 +114,15 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 
 	$scope.listProvinceOptions();
-	$scope.listCityOptions();
-	$scope.listTownshipOptions();
+
+	$('#pprovince').change(function () { 
+		$scope.listCityOptions();
+	});
+	$('#pcity').change(function () {
+		$scope.listTownshipOptions();
+	});
+	// $scope.listCityOptions();
+	// $scope.listTownshipOptions();
 	$scope.listPlaceTypeOptions();
 
 	$(document).ready(function () {
@@ -129,10 +132,8 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 	var urlParams = window.location.pathname;
 	urlParams = urlParams.split("/")[2]
 	var pid = urlParams.split("=")[1]
-
-	var typeOptionsURL = '/' + $.param({ action: 'get-detail', pid: pid });
 	// Make a request
-	apiCall(typeOptionsURL, 'POST').then(
+	apiCall('/get-detail', 'POST', {pid: pid}).then(
 		function (response) {
 			// Success Callback
 			var items = response.data[0];
@@ -153,6 +154,17 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 			$("#pfacilities").val(items["facilities"]);
 			$("#pcontact").val(items["contactinfo"]);
 			$("#imgfeatured").val(items["imgfeatured"]);
+			$("#pvideo").val(items["video"]);
+			$("#photo1").val(items["photo1"]);
+			$("#photo2").val(items["photo2"]);
+			$("#photo3").val(items["photo3"]);
+			$("#photo4").val(items["photo4"]);
+			$("#photo5").val(items["photo5"]);
+			$("#photo6").val(items["photo6"]);
+			$("#photo7").val(items["photo7"]);
+			$("#photo8").val(items["photo8"]);
+			$("#photo9").val(items["photo9"]);
+			$("#photo10").val(items["photo10"]);
 			// $("#paudio").val(items["audio"]);
 			tid = items["tid"];
 			pprovince = items["id_1"];
@@ -160,9 +172,7 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 			ptownship = items["adm3"];
 			var prating = items["rating"];
 			$('#ptype_selector option[value="' + tid + '"]').attr("selected", "selected");
-			$('#pprovince option[value="' + pprovince + '"]').attr("selected", "selected");
-			$('#pcity option[value="' + pcity + '"]').attr("selected", "selected");
-			$('#ptownship option[value="' + ptownship + '"]').attr("selected", "selected");
+			$('#pprovince option[value="' + pprovince + '"]').attr("selected", "selected").change();
 			$('#prating option[value="' + prating + '"]').attr("selected", "selected");
 
 			if (items["facilities_list"] !== null) {
@@ -205,9 +215,19 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 		var imgfeatured = $("#imgfeatured").val();
 		var facilities_list = $("#facilities_selects").val();
 		// var audio = $("#paudio").val();
+		var video = $("#pvideo").val();
+		var photo1 = $("#photo1").val();
+		var photo2 = $("#photo2").val();
+		var photo3 = $("#photo3").val();
+		var photo4 = $("#photo4").val();
+		var photo5 = $("#photo5").val();
+		var photo6 = $("#photo6").val();
+		var photo7 = $("#photo7").val();
+		var photo8 = $("#photo8").val();
+		var photo9 = $("#photo9").val();
+		var photo10 = $("#photo10").val();
 
 		var data = {
-			action: 'edit-place',
 			pid: pid,
 			pname: pname,
 			plat: plat,
@@ -233,11 +253,21 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 			imgfeatured: imgfeatured,
 			facilitiesList: facilities_list.toString(),
 			// audio: audio
+			video: video,
+			photo1: photo1,
+			photo2: photo2,
+			photo3: photo3,
+			photo4: photo4,
+			photo5: photo5,
+			photo6: photo6,
+			photo7: photo7,
+			photo8: photo8,
+			photo9: photo9,
+			photo10: photo10
 		};
 
-		var typeOptionsURL = '/' + $.param(data);
 		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('edit-place', 'POST', data).then(
 			function (response) {
 				// Success Callback
 				window.location.href = "/data-management";

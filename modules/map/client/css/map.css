@@ -4,6 +4,7 @@ body, html {
     overflow-y: auto;
     font-family: 'kanit', sans-serif;
 }
+
 label {
     display: inline-block;
     max-width: 100%;
@@ -20,7 +21,6 @@ label {
   height: auto;
   background-color: #f0f0f0; /* Fallback background if no map is loaded */
 }
-
 
 .form-control {
     display: block;
@@ -47,7 +47,7 @@ label {
 
 .btn-primary {
     color: #fff;
-    background: linear-gradient(90deg, #f70b4c, #feae81);
+    background: linear-gradient(90deg, #100e0f, #ff3475);
     border-color: #ddd;
     border-radius: 3px;
     font-size: 14px;
@@ -138,7 +138,7 @@ label {
     position: absolute;
     background: #FFF;
     padding: 5px;
-    color: #f70b4c;
+    color: #100e0f;
     font-size: 16px;
     font-weight: 500;
     left: 0;
@@ -158,7 +158,7 @@ label {
   position: absolute;
   background: #FFF;
   padding: 11px 1px 2px 5px;
-  color: #f70b4c;
+  color: #100e0f;
   font-size: 12px;
   font-weight: 500;
   right: 0px;
@@ -185,7 +185,7 @@ label {
 .place-name-list{
   font-size: 14px;
   font-weight: 500;
-  color: #f70b4c;
+  color: #100e0f;
 }
 .place-location-list{
   font-size: 12px;
@@ -195,7 +195,7 @@ label {
 .place-name{
   font-size: 32px;
   font-weight: 500;
-  color: #f70b4c;
+  color: #100e0f;
 }
 .place-desc{
   font-size: 14px;
@@ -225,7 +225,7 @@ label {
 .sidenav-right li span h3{
   font-size : 14px;
   font-weight: 500;
-  color:  #f70b4c;
+  color:  #100e0f;
 }
 
 .sidenav-right li span p{
@@ -256,7 +256,7 @@ label {
 }
 
 .control-panel {
-  bottom:35%;
+  bottom:40%;
   left: 10px;
   width: 38px;
 }
@@ -286,7 +286,7 @@ label {
 
 
 .control-layer {
-    bottom: 5%;
+    bottom: 15%;
     left: 10px;
     width: 38px;
 }
@@ -328,12 +328,12 @@ label {
 
 .control-layer li.active{
   background: #FFF;
-  color:  #f70b4c;
+  color:  #100e0f;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.3);
 }
 
 .control-layer li.active .panel-icon{
-  fill: linear-gradient(90deg, #f70b4c, #feae81);
+  fill: linear-gradient(90deg, #100e0f, #ff3475);
 }
 .panel-icon {
     fill: #FFF;
@@ -362,7 +362,7 @@ label {
     line-height: 1;
     text-shadow: none;
     padding: 3px 5px;
-    background-color: #f70b4c;
+    background-color: #100e0f;
     color: white;
     border-radius: 4px;
 }
@@ -370,7 +370,7 @@ label {
     top: 26px;
     width: 20px;
     height: 20px;
-    border: 4px solid #f70b4c;
+    border: 4px solid #100e0f;
     background-color: white;
     border-radius: 24px;
     box-shadow: 0 1px 3px rgba(0,0,255,0.3);
@@ -379,7 +379,7 @@ label {
 .irs--round .irs-bar {
     top: 36px;
     height: 4px;
-    background-color: #f70b4c;
+    background-color: #100e0f;
 }
 
 

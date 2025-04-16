@@ -7,7 +7,7 @@ module.exports = {
     keywords: 'สถานที่ท่่องเที่ยว, อีสาน, ประเทศไทย',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
-  port: process.env.PORT || 3034,
+  port: process.env.PORT || 3030,
   host: process.env.HOST || '0.0.0.0',
   templateEngine: 'swig',
   // Session Cookie settings

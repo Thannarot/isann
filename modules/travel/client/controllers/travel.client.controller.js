@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('core').controller('tourismCtrl', function ($scope, $http) {
+angular.module('core').controller('travelCtrl', function ($scope, $http) {
 
 	var apiCall = function (url, method) {
 		//console.log(method, url);

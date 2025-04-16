@@ -5,6 +5,7 @@ var validator = require('validator'),
 	db = require(path.resolve('./config/lib/db')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 const bcrypt = require('bcryptjs');
+const cons = require('consolidate');
 require('dotenv').config(); // Load environment variables
 
 /**
@@ -122,47 +123,61 @@ exports.getResturant = function (req, res) {
 		});
 };
 
+exports.getCafe = function (req, res) {
+
+	db.any("SELECT * FROM ela_places where tid=4")
+		.then(data => {
+			// success
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error); // print the error;
+			console.log('ERROR');
+		});
+};
+
 exports.filterPlace = function (req, res) {
-    var params = req.query; 
-    // Ensure parameters have default values
-    var pname = params.pname !== undefined ? params.pname : '';
-    var distance = params.distance !== undefined ? parseFloat(params.distance) : 0;
-    var rating = params.rating !== undefined ? parseFloat(params.rating) : 5;
-    var ptype = params.ptype !== undefined ? params.ptype : 9999;
-    var adm1 = params.adm1 !== undefined ? params.adm1 : 9999;
-    var adm2 = params.adm2 !== undefined ? params.adm2 : 9999;
-    var adm3 = params.adm3 !== undefined ? params.adm3 : 9999;
-    var lat = params.geolocate_lat !== undefined ? parseFloat(params.geolocate_lat) : null;
-    var lng = params.geolocate_lng !== undefined ? parseFloat(params.geolocate_lng) : null;
+	var params = req.body;
+	// Ensure parameters have default values
+	var pname = params.pname !== undefined ? params.pname : '';
+	var distance = params.distance !== undefined ? parseFloat(params.distance) : 0;
+	var rating = params.rating !== undefined ? parseFloat(params.rating) : 5;
+	var ptype = params.ptype !== undefined ? params.ptype : "9999";
+	var adm1 = params.adm1 !== undefined ? params.adm1 : '';
+	var adm2 = params.adm2 !== undefined ? params.adm2 : '';
+	var adm3 = params.adm3 !== undefined ? params.adm3 : '';
+	var lat = params.geolocate_lat !== undefined ? parseFloat(params.geolocate_lat) : null;
+	var lng = params.geolocate_lng !== undefined ? parseFloat(params.geolocate_lng) : null;
 
-    var main_sql = "SELECT * FROM ela_places JOIN ela_district ON adm2 = ela_district.id_2 WHERE 1=1";
+	var main_sql = "SELECT * FROM ela_places JOIN ela_district ON adm2 = ela_district.id_2 WHERE 1=1";
 
-    // Add filters only if values are valid
-    if (!isNaN(rating)) main_sql += ` AND rating <= ${rating}`;
-    if (pname !== '') main_sql += ` AND name LIKE '%${pname}%'`;
-    if (ptype !== 9999) main_sql += ` AND tid = ${ptype}`;
-    if (adm1 !== 9999) main_sql += ` AND id_1 = ${adm1}`;
-    if (adm2 !== 9999) main_sql += ` AND adm2 = ${adm2}`;
-    if (adm3 !== 9999) main_sql += ` AND adm3 = ${adm3}`;
+	// Add filters only if values are valid
+	if (!isNaN(rating)) main_sql += ` AND rating <= ${rating}`;
+	if (pname !== '') main_sql += ` AND name LIKE '%${pname}%'`;
+	if (ptype !=="9999") main_sql += ` AND tid = ${ptype}`;
+	if (adm1 !== '') main_sql += ` AND id_1 = ${adm1}`;
+	if (adm2 !== '') main_sql += ` AND adm2 = ${adm2}`;
+	if (adm3 !== '') main_sql += ` AND adm3 = ${adm3}`;
 
-    if (!isNaN(lat) && !isNaN(lng)) {
-        main_sql += ` AND ST_DWithin(
+	if (!isNaN(lat) && !isNaN(lng) && lat !== null && lng !== null) {
+		main_sql += ` AND ST_DWithin(
             ST_SetSRID(ST_MakePoint(lng, lat), 4326)::geography, 
             ST_GeomFromText('POINT(${lng} ${lat})', 4326)::geography, 
             ${distance * 1000}
         )`;
-    }
+	}
 
-    var query = main_sql + " ORDER BY pid ASC;";
-    db.any(query)
-        .then(data => {
-            res.setHeader("Content-Type", "application/json");
-            res.json(data);
-        })
-        .catch(error => {
-            console.error("Database Query Error:", error);
-            res.status(500).json({ error: "Database query failed", details: error });
-        });
+	var query = main_sql + " ORDER BY pid ASC;";
+	db.any(query)
+		.then(data => {
+			res.setHeader("Content-Type", "application/json");
+			res.json(data);
+		})
+		.catch(error => {
+			console.error("Database Query Error:", error);
+			res.status(500).json({ error: "Database query failed", details: error });
+		});
 };
 
 
@@ -181,8 +196,7 @@ exports.getProvinceList = function (req, res) {
 
 
 exports.getCityList = function (req, res) {
-	var params = req.params;
-	var prov_id = params.prov_id;
+	var prov_id = req.body.prov_id;
 	db.any("SELECT * FROM ela_district where region='north-east' AND id_1 = " + prov_id)
 		.then(data => {
 			// success
@@ -196,8 +210,7 @@ exports.getCityList = function (req, res) {
 };
 
 exports.getTownshipList = function (req, res) {
-	var params = req.params;
-	var dist_id = params.dist_id;
+	var dist_id = req.body.dist_id;
 	db.any("SELECT * FROM ela_township where region='north-east' AND id_2 = " + dist_id)
 		.then(data => {
 			// success
@@ -226,8 +239,7 @@ exports.getPlaceTypeList = function (req, res) {
 };
 
 exports.getDetail = function (req, res) {
-	var params = req.params;
-	var pid = params.pid;
+	var pid = req.body.pid;
 	var query = "SELECT * FROM ela_places JOIN ela_district ON adm2 = ela_district.id_2 WHERE pid=" + pid;
 	db.any(query)
 		.then(data => {
@@ -258,9 +270,56 @@ exports.deletePlace = function (req, res) {
 };
 
 exports.addNewPlace = function (req, res) {
-	var params = req.params;
-	var val_params = "('" + params.pname + "'," + params.plat + "," + params.plng + ",'" + params.desc + "','" + params.entrance_fee + "','" + params.store + "','" + params.cellular_net + "','" + params.travel + "','" + params.agency + "','" + params.plocation + "','" + params.gmap + "','" + params.infosource + "','" + params.photosource + "','" + params.extralink + "','" + params.facilities + "','" + params.contactinfo + "'," + params.ptype + "," + params.adm2 + "," + params.adm3 + "," + params.rating + ", '" + params.imgfeatured + ", '" + params.facilitiesList +"')";
-	var query = "INSERT INTO ela_places (name, lat, lng, description, entrance_fee, store, cellular_net, travel, agency, location, gmap, infosource, photosource, extralink, facilities, contactinfo, tid, adm2, adm3, rating, imgfeatured, facilities_list) VALUES " + val_params + "";
+	const params = req.body;
+
+	// Extract up to 10 photo fields
+	const photos = [];
+	for (let i = 1; i <= 10; i++) {
+		const key = `photo${i}`;
+		photos.push(params[key] || '');
+	}
+
+	// Build the value part of the SQL query
+	const val_params = `(
+    '${params.pname}', 
+    ${params.plat}, 
+    ${params.plng}, 
+    '${params.desc}', 
+    '${params.entrance_fee}', 
+    '${params.store}', 
+    '${params.cellular_net}', 
+    '${params.travel}', 
+    '${params.agency}', 
+    '${params.plocation}', 
+    '${params.gmap}', 
+    '${params.infosource}', 
+    '${params.photosource}', 
+    '${params.extralink}', 
+    '${params.facilities}', 
+    '${params.contactinfo}', 
+    ${params.ptype}, 
+    ${params.adm2}, 
+    ${params.adm3}, 
+    ${params.rating}, 
+    '${params.imgfeatured}', 
+    '${params.facilitiesList}', 
+	'${params.video}', 
+    '${photos[0]}', '${photos[1]}', '${photos[2]}', '${photos[3]}', '${photos[4]}',
+    '${photos[5]}', '${photos[6]}', '${photos[7]}', '${photos[8]}', '${photos[9]}'
+)`;
+
+	// Full SQL insert including photo1 to photo10
+	const query = `
+    INSERT INTO ela_places (
+        name, lat, lng, description, entrance_fee, store, cellular_net, travel, agency,
+        location, gmap, infosource, photosource, extralink, facilities, contactinfo,
+        tid, adm2, adm3, rating, imgfeatured, facilities_list, video,
+        photo1, photo2, photo3, photo4, photo5,
+        photo6, photo7, photo8, photo9, photo10
+    ) VALUES ${val_params};
+`;
+
+
 	db.any(query)
 		.then(data => {
 			// success
@@ -274,7 +333,7 @@ exports.addNewPlace = function (req, res) {
 };
 
 exports.editPlace = function (req, res) {
-	var params = req.params;
+	var params = req.body;
 	var pid = params.pid;
 	var name = "name='" + params.pname + "',";
 	var lat = "lat=" + params.plat + ",";
@@ -297,10 +356,28 @@ exports.editPlace = function (req, res) {
 	var adm3 = "adm3=" + params.adm3 + ",";
 	var rating = "rating=" + params.rating + ", ";
 	var imgfeatured = "imgfeatured='" + params.imgfeatured + "', ";
-	var facilitiesList = "facilities_list='" + params.facilitiesList + "' ";
+	var facilitiesList = "facilities_list='" + params.facilitiesList + "', ";
 	// var audio = "audio='" + params.audio + "' ";
-
-	var query = "UPDATE ela_places SET " + name + lat + lng + description + entrance_fee + store + cellular_net + travel + agency + location + gmap + infosource + photosource + extralink + facilitiesList + contactinfo + tid + adm2 + adm3 + rating + imgfeatured + facilities +" WHERE pid=" + pid
+	var video = "video='" + params.video + "', ";
+	var photo1 = "photo1='" + params.photo1 + "',";
+	var photo2 = "photo2='" + params.photo2 + "',";
+	var photo3 = "photo3='" + params.photo3 + "',";
+	var photo4 = "photo4='" + params.photo4 + "',";
+	var photo5 = "photo5='" + params.photo5 + "',";
+	var photo6 = "photo6='" + params.photo6 + "',";
+	var photo7 = "photo7='" + params.photo7 + "',";
+	var photo8 = "photo8='" + params.photo8 + "',";
+	var photo9 = "photo9='" + params.photo9 + "',";
+	var photo10 = "photo10='" + params.photo10 + "',";
+	var photos = photo1 + photo2 + photo3 + photo4 + photo5 + photo6 + photo7 + photo8 + photo9 + photo10;
+	// Remove the last comma from the photos string
+	photos = photos.slice(0, -1);
+	// Combine all the fields into a single string
+	var allFields = name + lat + lng + description + entrance_fee + store + cellular_net + travel + agency + location + gmap + infosource + photosource + extralink + contactinfo + tid + adm2 + adm3 + rating + imgfeatured + facilitiesList + video;
+	// Remove the last comma from the allFields string
+	allFields = allFields.slice(0, -1);
+	// Construct the SQL query
+	var query = "UPDATE ela_places SET " + allFields + " " + photos + " WHERE pid=" + pid
 	db.any(query)
 		.then(data => {
 			// success
@@ -340,14 +417,14 @@ exports.getAdminPasswordHash = function (req, res) {
 };
 // API to validate admin login
 exports.validateAdminLogin = function (req, res) {
-    const userPassword = req.body.password; // Password entered by the user
-	const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "fallbackpassword"; 
-    // Compare input password with stored password
-    if (userPassword === ADMIN_PASSWORD) {
-        console.log("Password match, login successful!");
-        return res.json({ success: true });
-    } else {
-        console.log("Password mismatch!");
-        return res.status(401).json({ error: "Invalid password" });
-    }
+	const userPassword = req.body.password; // Password entered by the user
+	const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "fallbackpassword";
+	// Compare input password with stored password
+	if (userPassword === ADMIN_PASSWORD) {
+		console.log("Password match, login successful!");
+		return res.json({ success: true });
+	} else {
+		console.log("Password mismatch!");
+		return res.status(401).json({ error: "Invalid password" });
+	}
 };

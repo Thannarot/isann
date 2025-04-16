@@ -29,7 +29,7 @@ angular.module('core').controller('hotelCtrl', function ($scope, $http) {
 			// create a HTML element for each feature
 
 			var contentHTML = `<div class="card" data-pid="` + pid + `">
-			<img src="`+ imgfeatured + `" alt="Homestay 1" class="card-image">
+			<img src="`+ imgfeatured + `" alt="" class="card-image">
 			<div class="card-body">
 			  <h2 class="card-title">`+ placeName + `</h2>
 			  <ul class="card-info">

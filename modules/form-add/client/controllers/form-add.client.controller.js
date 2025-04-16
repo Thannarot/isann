@@ -8,92 +8,188 @@ angular.module('form-add').controller('inputCtl', function ($scope, $http) {
 		$state.go('admin-login'); // Redirect to login if not logged in
 	}
 
-	var apiCall = function (url, method) {
-		//console.log(method, url);
+	var apiCall = function (url, method, data) {
 		return $http({
 			method: method,
 			url: url,
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	};
+	
 
 	$scope.listProvinceOptions = function () {
-		var cityOptionsURL = '/' + $.param({ action: 'get-province-list' });
-		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+
+		// Define endpoint and send data in body
+		const endpoint = '/get-province-list';
+		const data = {  };
+	
+		apiCall(endpoint, 'POST', data).then(
 			function (response) {
-				// Success Callback
-				var items = response.data;
+				const items = Array.isArray(response.data) ? response.data : [];
+	
+				const $townshipSelect = $('#pprovince');
+				$townshipSelect.html('');
+				$townshipSelect.append('<option value="">ทั้งหมด</option>');
+	
 				$.each(items, function (i, item) {
-					$('#pprovince').append($('<option>', {
-						value: item.id_1,
-						text: item.name_1
-					}));
+					$townshipSelect.append(
+						$('<option>', {
+							value: item.id_1,
+							text: item.name_1
+						})
+					);
 				});
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('Failed to load townships:', error);
 			}
 		);
 	};
+	
+	// $scope.listProvinceOptions = function () {
+	// 	var cityOptionsURL = '/' + $.param({ action: 'get-province-list' });
+	// 	// Make a request
+	// 	apiCall(cityOptionsURL, 'POST').then(
+	// 		function (response) {
+	// 			// Success Callback
+	// 			var items = response.data;
+	// 			$.each(items, function (i, item) {
+	// 				$('#pprovince').append($('<option>', {
+	// 					value: item.id_1,
+	// 					text: item.name_1
+	// 				}));
+	// 			});
+	// 		},
+	// 		function (error) {
+	// 			// Error Callback
+	// 			console.log('ERROR: ' + error);
+	// 		}
+	// 	);
+	// };
 
+	// $scope.listCityOptions = function () {
+	// 	const prov_id = $('#pprovince').val();
+	// 	console.log(prov_id);
+	// 	var cityOptionsURL = '/' + $.param({ action: 'get-city-list', prov_id: prov_id });
+	// 	// Make a request
+	// 	apiCall(cityOptionsURL, 'POST').then(
+	// 		function (response) {
+	// 			// Success Callback
+	// 			var items = response.data;
+	// 			$('#pcity').html('');
+	// 			$('#pcity').append('<option value="">ทั้งหมด</option>');
+	// 			$.each(items, function (i, item) {
+	// 				$('#pcity').append($('<option>', {
+	// 					value: item.id_2,
+	// 					text: item.name_2
+	// 				}));
+	// 			});
+	// 		},
+	// 		function (error) {
+	// 			// Error Callback
+	// 			console.log('ERROR: ' + error);
+	// 		}
+	// 	);
+	// };
 
 	$scope.listCityOptions = function () {
 		const prov_id = $('#pprovince').val();
-		console.log(prov_id);
-		var cityOptionsURL = '/' + $.param({ action: 'get-city-list', prov_id: prov_id });
-		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+		if (!prov_id) {
+			console.warn("No township selected. Skipping township fetch.");
+			return;
+		}
+	
+		// Define endpoint and send data in body
+		const endpoint = '/get-city-list';
+		const data = { prov_id: prov_id };
+	
+		apiCall(endpoint, 'POST', data).then(
 			function (response) {
-				// Success Callback
-				var items = response.data;
-				$('#pcity').html('');
-				$('#pcity').append('<option value="9999">ทั้งหมด</option>');
+				const items = Array.isArray(response.data) ? response.data : [];
+	
+				const $select = $('#pcity');
+				$select.html('');
+				$select.append('<option value="">ทั้งหมด</option>');
+	
 				$.each(items, function (i, item) {
-					$('#pcity').append($('<option>', {
-						value: item.id_2,
-						text: item.name_2
-					}));
+					$select.append(
+						$('<option>', {
+							value: item.id_2,
+							text: item.name_2
+						})
+					);
 				});
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('Failed to load townships:', error);
 			}
 		);
 	};
 
+	// $scope.listTownshipOptions = function () {
+	// 	const dist_id = $('#pcity').val();
+	// 	console.log(dist_id);
+	// 	var townshipOptionsURL = '/' + $.param({ action: 'get-township-list', dist_id:dist_id });
+	// 	// Make a request
+	// 	apiCall(townshipOptionsURL, 'POST').then(
+	// 		function (response) {
+	// 			// Success Callback
+	// 			var items = response.data;
+	// 			$('#ptownship').html('');
+	// 			$('#ptownship').append('<option value="">ทั้งหมด</option>');
+	// 			$.each(items, function (i, item) {
+	// 				$('#ptownship').append($('<option>', {
+	// 					value: item.id_3,
+	// 					text: item.name_3
+	// 				}));
+	// 			});
+	// 		},
+	// 		function (error) {
+	// 			// Error Callback
+	// 			console.log('ERROR: ' + error);
+	// 		}
+	// 	);
+	// };
+
 	$scope.listTownshipOptions = function () {
 		const dist_id = $('#pcity').val();
-		console.log(dist_id);
-		var townshipOptionsURL = '/' + $.param({ action: 'get-township-list', dist_id:dist_id });
-		// Make a request
-		apiCall(townshipOptionsURL, 'POST').then(
+		if (!dist_id) {
+			console.warn("No district selected. Skipping township fetch.");
+			return;
+		}
+		// Define endpoint and send data in body
+		const endpoint = '/get-township-list';
+		const data = { dist_id: dist_id };
+	
+		apiCall(endpoint, 'POST', data).then(
 			function (response) {
-				// Success Callback
-				var items = response.data;
-				$('#ptownship').html('');
-				$('#ptownship').append('<option value="9999">ทั้งหมด</option>');
+				const items = Array.isArray(response.data) ? response.data : [];
+	
+				const $select = $('#ptownship');
+				$select.html('');
+				$select.append('<option value="">ทั้งหมด</option>');
+	
 				$.each(items, function (i, item) {
-					$('#ptownship').append($('<option>', {
-						value: item.id_3,
-						text: item.name_3
-					}));
+					$select.append(
+						$('<option>', {
+							value: item.id_3,
+							text: item.name_3
+						})
+					);
 				});
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('Failed to load townships:', error);
 			}
 		);
 	};
 
 
 	$scope.listPlaceTypeOptions = function () {
-		var typeOptionsURL = '/' + $.param({ action: 'get-placetype-list' });
+		// var typeOptionsURL = '/' + $.param({ action: 'get-placetype-list' });
 		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('get-placetype-list', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
@@ -142,9 +238,18 @@ angular.module('form-add').controller('inputCtl', function ($scope, $http) {
 		var rating = $("#rating").val();
 		var imgfeatured = $("#imgfeatured").val();
 		var facilities_list = $("#facilities_selects").val();
-
+		var video = $("#pvideo").val();
+		var photo1 = $("#photo1").val();
+		var photo2 = $("#photo2").val();
+		var photo3 = $("#photo3").val();
+		var photo4 = $("#photo4").val();
+		var photo5 = $("#photo5").val();
+		var photo6 = $("#photo6").val();
+		var photo7 = $("#photo7").val();
+		var photo8 = $("#photo8").val();
+		var photo9 = $("#photo9").val();
+		var photo10 = $("#photo10").val();
 		var data = {
-			action: 'add-place',
 			pname: pname,
 			plat: plat,
 			plng: plng,
@@ -168,23 +273,44 @@ angular.module('form-add').controller('inputCtl', function ($scope, $http) {
 			rating: rating,
 			imgfeatured: imgfeatured,
 			facilitiesList: facilities_list.toString(),
+			video: video,
+			photo1: photo1,
+			photo2: photo2,
+			photo3: photo3,
+			photo4: photo4,
+			photo5: photo5,
+			photo6: photo6,
+			photo7: photo7,
+			photo8: photo8,
+			photo9: photo9,
+			photo10: photo10
 			// audio: audio
 
 		};
 
-		var typeOptionsURL = '/' + $.param(data);
-		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('/add-place', 'POST', data).then(
 			function (response) {
-				// Success Callback
 				window.location.href = "/data-management";
 			},
 			function (error) {
-				// Error Callback
 				console.log('ERROR: ' + error);
-				alert("กรุณากรอกข้อมูลให้ครบถ้วน")
+				alert("กรุณากรอกข้อมูลให้ครบถ้วน");
 			}
 		);
+
+		// var typeOptionsURL = '/' + $.param(data);
+		// // Make a request
+		// apiCall(typeOptionsURL, 'POST').then(
+		// 	function (response) {
+		// 		// Success Callback
+		// 		window.location.href = "/data-management";
+		// 	},
+		// 	function (error) {
+		// 		// Error Callback
+		// 		console.log('ERROR: ' + error);
+		// 		alert("กรุณากรอกข้อมูลให้ครบถ้วน")
+		// 	}
+		// );
 	});
 
 	$("#form_input_cancel").click(function () {
@@ -219,7 +345,6 @@ angular.module('form-add').controller('inputCtl', function ($scope, $http) {
 			$("#pcell").val('ไม่ระบุ');
 			$("#pagency").val('ไม่ระบุ');
 		}
-
 	});
 	$(document).ready(function () {
 		$('.js-example-basic-multiple').select2();

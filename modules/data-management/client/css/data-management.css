@@ -59,7 +59,7 @@
     margin-top: 15px;
     width: 100%;
     padding: 10px;
-    background: linear-gradient(90deg, #f70b4c, #feae81);
+    background: linear-gradient(90deg, #100e0f, #ff3475);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -68,5 +68,5 @@
     transition: 0.3s;
 }
 .login-btn:hover {
-    background: #feae81;
+    background: #ff3475;
 }

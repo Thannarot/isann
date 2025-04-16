@@ -9,11 +9,12 @@ placeCtrl.$inject = ['$scope', '$http', '$stateParams'];
 
 function placeCtrl($scope, $http, $stateParams) {
 	// Function to make API calls
-	var apiCall = function (url, method) {
+	var apiCall = function (url, method, data) {
 		return $http({
 			method: method,
 			url: url,
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	};
 
@@ -21,22 +22,83 @@ function placeCtrl($scope, $http, $stateParams) {
 	$scope.createCard = function (response) {
 		$("#content").html('');
 		var items = response.data[0];
-		console.log(items)
+
+		// Add big image and thumbnail gallery
+		var photoPreviewHtml = `
+				<div class="col-sm-12">
+				<img id="main-photo" src="${items.photo1}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+				</div>
+				<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
+
+		for (var i = 1; i <= 10; i++) {
+			var photo = items["photo" + i];
+			if (photo && photo !== "undefined") {
+				photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
+			}
+		}
+		photoPreviewHtml += '</div>';
+
+		var videoBlock = '';
+		const videoUrl = items["video"];
+
+		if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
+			let embedUrl = '';
+
+			try {
+				// Handle YouTube links
+				if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+					let youtubeId = '';
+
+					if (videoUrl.includes('youtu.be')) {
+						youtubeId = videoUrl.split('/').pop();
+					} else {
+						const urlObj = new URL(videoUrl);
+						youtubeId = urlObj.searchParams.get("v");
+					}
+
+					if (youtubeId) {
+						embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+					}
+				}
+
+				// Handle Google Drive links
+				else if (videoUrl.includes('drive.google.com')) {
+					const match = videoUrl.match(/[-\w]{25,}/);
+					if (match && match[0]) {
+						const fileId = match[0];
+						embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+					}
+				}
+
+				// Embed if valid
+				if (embedUrl) {
+					videoBlock = `
+				<div class="col-sm-12" style="margin-bottom: 20px;">
+					<iframe width="100%" height="400"
+						src="${embedUrl}"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen>
+					</iframe>
+				</div>
+			`;
+				}
+			} catch (err) {
+				console.error("Error parsing video URL:", err);
+			}
+		}
+
 		// console.log()
 		$("#content").html(
-			'<div class="row">' +
-			// '<div class="col-sm-2">' +
-			// '<button id="decrease-text-size" class="btn btn-sm btn-default text-size"> - </button>' +
-			// '<button id="default-text-size" class="btn btn-sm btn-default text-size">ปกติ</button>' +
-			// '<button id="increase-text-size" class="btn btn-sm btn-default text-size">+</button>' +
-			// '</div>' +
+			'<div class="row" style="margin-bottom: 150px;">' +
 			'<div class="col-sm-12"><p class="place-name">' + items["name"] + '</p></div>' +
 			'<div class="col-sm-12"><img src="' + items["imgfeatured"] + '" alt="" style="width:100%;margin-bottom: 20px;"></div>' +
-			// '<div class="col-sm-12"><p style="font-size: 12px;">ที่มาของรูป: '+items["imgfeatured"]+'</p></div>'+
+
 			'<div class="col-sm-12">' +
-			'<audio controls="controls"><source src="' + items["audio"] + '" ></audio>' +
+			videoBlock + 
 			'<p class="place-desc"><b>สถานที่ตั้ง:</b> ' + items["location"] + '</p>' +
 			'<p class="place-desc"><b>พิกัด:</b> ' + items["lat"] + ', ' + items["lng"] + '</p>' +
+			
 			'<p class="place-desc"><b>ความเป็นมา:</b> ' + items["description"] + '</p>' +
 			'<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +
 			'<div class="col-sm-12" style="margin-bottom: 15px;">' +
@@ -58,7 +120,7 @@ function placeCtrl($scope, $http, $stateParams) {
 			'<option value="15">ห้องพักมีสัญญานบอกเหตุ หรือเตือนภัย</option>' +
 			'</select>' +
 			'</div>' +
-		
+
 
 			'<p class="place-desc"><b>สิ่งอำนวยความสะดวก เพิ่มเติม:</b> ' + items["description"] + '</p>' +
 			'<p class="place-desc"><b>อัตราค่าบริการ:</b> ' + items["entrance_fee"] + '</p>' +
@@ -73,17 +135,16 @@ function placeCtrl($scope, $http, $stateParams) {
 			'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
 			'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
 
+			photoPreviewHtml +
+
 			'</div>' +
 			'</div>');
 		$(document).ready(function () {
-		$('.js-example-basic-multiple').select2();
-	});
-		
+			$('.js-example-basic-multiple').select2();
+		});
 
-		console.log(items["facilities"])
 		if (items["facilities"] !== null) {
 			var facilitiesList = items["facilities"].split(",");
-			console.log(facilitiesList)
 			for (var i = 0; i < facilitiesList.length; i++) {
 				$('#facilities_selects option[value="' + facilitiesList[i] + '"]').attr("selected", "selected").trigger('change');
 			}
@@ -95,10 +156,8 @@ function placeCtrl($scope, $http, $stateParams) {
 	$scope.fetchPlaceList = function () {
 		// Access the placeId from $stateParams
 		var pid = $stateParams.placeId;
-		var getPlaceURL = '/' + $.param({ action: 'get-detail', pid: pid });
-
 		// Make the API call
-		apiCall(getPlaceURL, 'POST').then(
+		apiCall('/get-detail', 'POST', { pid: pid }).then(
 			function (response) {
 				// Success callback
 				$scope.createCard(response);
@@ -112,25 +171,5 @@ function placeCtrl($scope, $http, $stateParams) {
 
 	// Fetch the place list on initialization
 	$scope.fetchPlaceList();
-
-
-
-	$(document).on('click', '#decrease-text-size', function (event) {
-		$(".place-desc").css("font-size", "14px");
-		$(".place-desc").css("font-weight", "500");
-	});
-	$(document).on('click', '#default-text-size', function (event) {
-		$(".place-desc").css("font-size", "16px");
-		$(".place-desc").css("font-weight", "500");
-	});
-
-	$(document).on('click', '#increase-text-size', function (event) {
-		$(".place-desc").css("font-size", "20px");
-		$(".place-desc").css("font-weight", "500");
-	});
-
-	// $(document).ready(function () {
-	// 	$('.js-example-basic-multiple').select2();
-	// });
 
 }

@@ -3,27 +3,20 @@
 'use strict';
 
 angular.module('core').controller('mapCtrl', function ($scope, $http) {
-
-
 	$scope.rssFeeds = [];
 
-
-	/**
-	 * RSS Feed
-	 */
-	var apiCall = function (url, method) {
-		//console.log(method, url);
+	var apiCall = function (url, method, data) {
 		return $http({
 			method: method,
 			url: url,
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	};
 
 	$scope.listProvinceOptions = function () {
-		var cityOptionsURL = '/' + $.param({ action: 'get-province-list' });
 		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+		apiCall('/get-province-list', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
@@ -44,14 +37,13 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 
 	$scope.listCityOptions = function () {
 		const prov_id = $('#province_selector').val();
-		var cityOptionsURL = '/' + $.param({ action: 'get-city-list', prov_id: prov_id });
 		// Make a request
-		apiCall(cityOptionsURL, 'POST').then(
+		apiCall('/get-city-list', 'POST', { prov_id: prov_id }).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
 				$('#city_selector').html('');
-				$('#city_selector').append('<option value="9999">ทั้งหมด</option>');
+				$('#city_selector').append('<option value="">ทั้งหมด</option>');
 				$.each(items, function (i, item) {
 					$('#city_selector').append($('<option>', {
 						value: item.id_2,
@@ -68,14 +60,13 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 
 	$scope.listTownshipOptions = function () {
 		const dist_id = $('#city_selector').val();
-		var townshipOptionsURL = '/' + $.param({ action: 'get-township-list', dist_id:dist_id });
 		// Make a request
-		apiCall(townshipOptionsURL, 'POST').then(
+		apiCall('/get-township-list', 'POST', { dist_id: dist_id }).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
 				$('#township_selector').html('');
-				$('#township_selector').append('<option value="9999">ทั้งหมด</option>');
+				$('#township_selector').append('<option value="">ทั้งหมด</option>');
 				$.each(items, function (i, item) {
 					$('#township_selector').append($('<option>', {
 						value: item.id_3,
@@ -91,9 +82,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	};
 
 	$scope.listPlaceTypeOptions = function () {
-		var typeOptionsURL = '/' + $.param({ action: 'get-placetype-list' });
 		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('/get-placetype-list', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data;
@@ -203,9 +193,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	}
 
 	$scope.fetchPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'get-places' });
 		// Make a request
-		apiCall(getPleaceURL, 'POST').then(
+		apiCall('/get-places', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				$scope.createPleaceList(response);
@@ -218,9 +207,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	};
 
 	$scope.filterPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'filter-place' });
 		// Make a request
-		apiCall(getPleaceURL, 'POST').then(
+		apiCall('/filter-place', 'POST', {}).then(
 			function (response) {
 				// Success Callback
 				$scope.createPleaceList(response);
@@ -346,12 +334,9 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			geolocate_lat: geolocate_lat,
 			geolocate_lng: geolocate_lng,
 		};
-	
-		var queryString = $.param(data);  // Convert object to query string
-		var typeOptionsURL = '/action=filter-place?' + queryString;  // Correct URL format
-	
+
 		// Make a request
-		apiCall(typeOptionsURL, 'POST')
+		apiCall('/filter-place', 'POST', data)
 			.then(function (response) {
 				// Success Callback
 				$scope.createPleaceList(response);
@@ -371,17 +356,80 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	$(document).on('click', '.liPlaceName', function (event) {
 		$('#menu-close-btn').click();
 		event.preventDefault();
-		/* Act on the event */
-
-		var typeOptionsURL = '/' + $.param({ action: 'get-detail', pid: $(this).attr('data-pid') });
 		// Make a request
-		apiCall(typeOptionsURL, 'POST').then(
+		apiCall('/get-detail', 'POST', {pid: $(this).attr('data-pid')}).then(
 			function (response) {
 				// Success Callback
 				var items = response.data[0];
 				map.flyTo({ center: [items["lng"], items["lat"]], zoom: 16 });
+
+				// Add big image and thumbnail gallery
+		var photoPreviewHtml = `
+		<div class="col-sm-12">
+		<img id="main-photo" src="${items.photo1}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+		</div>
+		<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
+
+for (var i = 1; i <= 10; i++) {
+	var photo = items["photo" + i];
+	if (photo && photo !== "undefined") {
+		photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
+	}
+}
+photoPreviewHtml += '</div>';
+
+var videoBlock = '';
+const videoUrl = items["video"];
+
+if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
+	let embedUrl = '';
+
+	try {
+		// Handle YouTube links
+		if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+			let youtubeId = '';
+
+			if (videoUrl.includes('youtu.be')) {
+				youtubeId = videoUrl.split('/').pop();
+			} else {
+				const urlObj = new URL(videoUrl);
+				youtubeId = urlObj.searchParams.get("v");
+			}
+
+			if (youtubeId) {
+				embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+			}
+		}
+
+		// Handle Google Drive links
+		else if (videoUrl.includes('drive.google.com')) {
+			const match = videoUrl.match(/[-\w]{25,}/);
+			if (match && match[0]) {
+				const fileId = match[0];
+				embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+			}
+		}
+
+		// Embed if valid
+		if (embedUrl) {
+			videoBlock = `
+		<div class="col-sm-12" style="margin-bottom: 20px;">
+			<iframe width="100%" height="400"
+				src="${embedUrl}"
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowfullscreen>
+			</iframe>
+		</div>
+	`;
+		}
+	} catch (err) {
+		console.error("Error parsing video URL:", err);
+	}
+}
+				
 				$(".table-detail").html(
-					'<div class="row">' +
+					'<div class="row" style="margin-bottom: 150px;">' +
 					// '<div class="flex">' +
 					// '<div class="col-sm-12">' +
 					// '<p>ปรับขนาดตัวอักษร</p>'+
@@ -398,7 +446,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					'<div class="col-sm-12"><img src="' + items["imgfeatured"] + '" alt="" style="height:350px;margin-bottom: 20px;"></div>' +
 					// '<div class="col-sm-12"><p style="font-size: 12px;">ที่มาของรูป: '+items["imgfeatured"]+'</p></div>'+
 					'<div class="col-sm-12">' +
-					'<audio controls="controls"><source src="' + items["audio"] + '" ></audio>' +
+					videoBlock + 
 
 					'<p class="place-desc"><b>ความเป็นมา:</b> ' + items["description"] + '</p>' +
 					'<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +
@@ -434,6 +482,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					'<p class="place-desc"><b>ที่มาของรูป:</b> ' + items["photosource"] + '</p>' +
 					'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
 					'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
+
+					photoPreviewHtml +
 
 					'</div>' +
 					'</div>');
