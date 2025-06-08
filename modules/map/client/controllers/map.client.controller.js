@@ -195,7 +195,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			$("#tableList").append('<li>' +
 				'<a href="#" class="liPlaceName" data-pid="' + pid + '">' +
 				'<div class="row">' +
-				'<div class="col-sm-4"><img src="' + transformDriveUrl(imgfeatured)  + '" alt="" style="width:100px;"></div>' +
+				'<div class="col-sm-4"><img src="' + imgfeatured + '" alt="" style="width:100px;"></div>' +
 				'<div class="col-sm-8">' +
 				'<p class="place-name-list">' + placeName + '</p>' +
 				'<p class="place-location-list">' + placeLocation + '</p>' +
@@ -379,18 +379,21 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 
 				// Add big image and thumbnail gallery
 				var photoPreviewHtml = `
-		<div class="col-sm-12">
-		<img id="main-photo" src="${items.photo1}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
-		</div>
-		<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
+				<div class="col-sm-12">
+					<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+				</div>
+				<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
 				for (var i = 1; i <= 10; i++) {
-					var photo = items["photo" + i];
-					if (photo && photo !== "undefined") {
-						photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
-					}
+				var rawUrl = items["photo" + i];
+				if (rawUrl && rawUrl !== "undefined") {
+					var photoUrl = transformDriveUrl(rawUrl);
+					photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
 				}
+				}
+
 				photoPreviewHtml += '</div>';
+
 
 				var videoBlock = '';
 				const videoUrl = items["video"];
@@ -457,7 +460,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					'<p class="place-desc"><b>สถานที่ตั้ง:</b> ' + items["location"] + '</p>' +
 					'<p class="place-desc"><b>พิกัด:</b> ' + items["lat"] + ', ' + items["lng"] + '</p>' +
 					'</div > ' +
-					'<div class="col-sm-12"><img src="' + transformDriveUrl(items["imgfeatured"])  + '" alt="" style="height:350px;margin-bottom: 20px;"></div>' +
+					'<div class="col-sm-12"><img src="' + transformDriveUrl(items["imgfeatured"]) + '" alt="" style="height:350px;margin-bottom: 20px;"></div>' +
 					// '<div class="col-sm-12"><p style="font-size: 12px;">ที่มาของรูป: '+items["imgfeatured"]+'</p></div>'+
 					'<div class="col-sm-12">' +
 					videoBlock +
@@ -494,8 +497,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					'<p class="place-desc"><b>แผนที่:</b> <a href="' + items["gmap"] + '" style="color:blue; font-size:16px;display: inline;" target="_blank">' + items["gmap"] + '</a></p>' +
 					'<p class="place-desc"><b>ที่มาของข้อมูล:</b> ' + items["infosource"] + '</p>' +
 					'<p class="place-desc"><b>ที่มาของรูป:</b> ' + items["photosource"] + '</p>' +
-					'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
-					'<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
+					// '<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
+					// '<p class="place-desc"><b>ลิงค์ใส่รูปเพิ่มเติม:</b> ' + items["extralink"] + '</p>' +
 
 					photoPreviewHtml +
 
