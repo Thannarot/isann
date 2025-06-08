@@ -110,7 +110,7 @@ function placeCtrl($scope, $http, $stateParams) {
 		$("#content").html(
 			'<div class="row" style="margin-bottom: 150px;">' +
 			'<div class="col-sm-12"><p class="place-name">' + items["name"] + '</p></div>' +
-			'<div class="col-sm-12"><img src="' + items["imgfeatured"] + '" alt="" style="width:100%;margin-bottom: 20px;"></div>' +
+			'<div class="col-sm-12"><img src="' + transformDriveUrl(items["imgfeatured"]) + '" alt="" style="width:100%;margin-bottom: 20px;"></div>' +
 
 			'<div class="col-sm-12">' +
 			videoBlock + 
