@@ -13,6 +13,19 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 		});
 	};
 
+	// Helper function to extract photo ID and build display URL
+	function transformDriveUrl(url) {
+		try {
+		const idMatch = url.match(/id=([^&]+)/);
+		if (idMatch && idMatch[1]) {
+			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1024`;
+		}
+		} catch (e) {
+		console.warn('Invalid photo URL:', url);
+		}
+		return ''; // fallback
+	}
+
 	$scope.createCard = function (response) {
 		$("#cards").html('');
 		for (var i = 0; i < response.data.length; i++) {
@@ -22,7 +35,7 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 			var lng = response.data[i]["lng"];
 			var lat = response.data[i]["lat"];
 			var placetype = response.data[i]["tid"];
-			var imgfeatured = response.data[i]["imgfeatured"];
+			var imgfeatured = transformDriveUrl(response.data[i]["imgfeatured"]);
 			var desc = response.data[i]["desc"];
 			var travel = response.data[i]["travel"];
 			var rating = response.data[i]["rating"];

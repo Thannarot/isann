@@ -7,6 +7,19 @@ angular
 // Inject dependencies properly
 placeCtrl.$inject = ['$scope', '$http', '$stateParams'];
 
+// Helper function to extract photo ID and build display URL
+function transformDriveUrl(url) {
+	try {
+	  const idMatch = url.match(/id=([^&]+)/);
+	  if (idMatch && idMatch[1]) {
+		return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+	  }
+	} catch (e) {
+	  console.warn('Invalid photo URL:', url);
+	}
+	return ''; // fallback
+}
+  
 function placeCtrl($scope, $http, $stateParams) {
 	// Function to make API calls
 	var apiCall = function (url, method, data) {
@@ -18,6 +31,7 @@ function placeCtrl($scope, $http, $stateParams) {
 		});
 	};
 
+
 	// Function to create cards from response
 	$scope.createCard = function (response) {
 		$("#content").html('');
@@ -25,18 +39,21 @@ function placeCtrl($scope, $http, $stateParams) {
 
 		// Add big image and thumbnail gallery
 		var photoPreviewHtml = `
-				<div class="col-sm-12">
-				<img id="main-photo" src="${items.photo1}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
-				</div>
-				<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
+		<div class="col-sm-12">
+			<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+		</div>
+		<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
 		for (var i = 1; i <= 10; i++) {
-			var photo = items["photo" + i];
-			if (photo && photo !== "undefined") {
-				photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
-			}
+		var rawUrl = items["photo" + i];
+		if (rawUrl && rawUrl !== "undefined") {
+			var photoUrl = transformDriveUrl(rawUrl);
+			photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
 		}
+		}
+
 		photoPreviewHtml += '</div>';
+
 
 		var videoBlock = '';
 		const videoUrl = items["video"];

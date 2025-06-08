@@ -142,7 +142,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			var lng = response.data[i]["lng"];
 			var lat = response.data[i]["lat"];
 			var placetype = response.data[i]["tid"];
-			var imgfeatured = response.data[i]["imgfeatured"];
+			var imgfeatured = transformDriveUrl(response.data[i]["imgfeatured"]);
 			// create a HTML element for each feature
 			var el = document.createElement('div');
 

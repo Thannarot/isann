@@ -181,7 +181,6 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 					$('#facilities_selects option[value="' + facilitiesList[i] + '"]').attr("selected", "selected").trigger('change');
 				}
 			}
-
 		},
 		function (error) {
 			// Error Callback

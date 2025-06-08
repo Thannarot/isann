@@ -13,6 +13,20 @@ angular.module('core').controller('tourismCtrl', function ($scope, $http) {
 		});
 	};
 
+	// Helper function to extract photo ID and build display URL
+	function transformDriveUrl(url) {
+		try {
+			const idMatch = url.match(/id=([^&]+)/);
+			if (idMatch && idMatch[1]) {
+				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1024`;
+			}
+		} catch (e) {
+			console.warn('Invalid photo URL:', url);
+		}
+		return ''; // fallback
+	}
+
+
 	$scope.createCard = function (response) {
 		$("#cards").html('');
 		for (var i = 0; i < response.data.length; i++) {
@@ -22,14 +36,16 @@ angular.module('core').controller('tourismCtrl', function ($scope, $http) {
 			var lng = response.data[i]["lng"];
 			var lat = response.data[i]["lat"];
 			var placetype = response.data[i]["tid"];
-			var imgfeatured = response.data[i]["imgfeatured"];
+			var imgfeatured = transformDriveUrl(response.data[i]["imgfeatured"]);
 			var desc = response.data[i]["desc"];
 			var travel = response.data[i]["travel"];
 			var rating = response.data[i]["rating"];
 			// create a HTML element for each feature
 
 			var contentHTML = `<div class="card" data-pid="` + pid + `">
-			<img src="`+ imgfeatured + `" alt="" class="card-image">
+
+			<img src="`+ imgfeatured + `"  class="card-image"/>
+
 			<div class="card-body">
 			  <h2 class="card-title">`+ placeName + `</h2>
 			  <ul class="card-info">
@@ -37,7 +53,7 @@ angular.module('core').controller('tourismCtrl', function ($scope, $http) {
 	
 				<li>🌟 Rating: `+ rating + `</li>
 			  </ul>
-			  <a href="/place/`+pid+`" class="card-button">อ่านเพิ่มเติม</a>
+			  <a href="/place/`+ pid + `" class="card-button">อ่านเพิ่มเติม</a>
 			</div>
 		  </div>`;
 

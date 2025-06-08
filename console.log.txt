@@ -700,3 +700,21 @@ I-Laa Kha-La - Development Environment
 Environment: development
 Port: 3030
 Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+I-Laa Kha-La - Development Environment
+Environment: development
+Port: 3030
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+I-Laa Kha-La - Development Environment
+Environment: development
+Port: 3030
+Database: chandb
++ Error: NODE_ENV is not defined! Using default development environment
+--
+I-Laa Kha-La - Development Environment
+Environment: development
+Port: 3030
+Database: chandb
