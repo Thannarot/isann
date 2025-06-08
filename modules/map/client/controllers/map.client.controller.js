@@ -125,8 +125,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	var map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v11',
-		zoom: 10,
-		center: [102.104, 12.610]
+		zoom: 9,
+		center: [103.226720, 16.617660]
 	});
 
 	if ("geolocation" in navigator) {
