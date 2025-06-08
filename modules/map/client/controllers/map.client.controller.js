@@ -14,6 +14,20 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		});
 	};
 
+	// Helper function to extract photo ID and build display URL
+	function transformDriveUrl(url) {
+		try {
+			const idMatch = url.match(/id=([^&]+)/);
+			if (idMatch && idMatch[1]) {
+				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1024`;
+			}
+		} catch (e) {
+			console.warn('Invalid photo URL:', url);
+		}
+		return ''; // fallback
+	}
+
+
 	$scope.listProvinceOptions = function () {
 		// Make a request
 		apiCall('/get-province-list', 'POST', {}).then(
@@ -181,7 +195,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			$("#tableList").append('<li>' +
 				'<a href="#" class="liPlaceName" data-pid="' + pid + '">' +
 				'<div class="row">' +
-				'<div class="col-sm-4"><img src="' + imgfeatured + '" alt="" style="width:100px;"></div>' +
+				'<div class="col-sm-4"><img src="' + transformDriveUrl(imgfeatured)  + '" alt="" style="width:100px;"></div>' +
 				'<div class="col-sm-8">' +
 				'<p class="place-name-list">' + placeName + '</p>' +
 				'<p class="place-location-list">' + placeLocation + '</p>' +
@@ -322,7 +336,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		var adm3 = $("#township_selector").val();
 		var geolocate_lat = $("#geo-lat").val();
 		var geolocate_lng = $("#geo-lng").val();
-	
+
 		var data = {
 			pname: pname,
 			distance: distance,
@@ -346,7 +360,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 				console.log('ERROR: ' + error);
 			});
 	});
-	
+
 
 	$("#filter-all-btn").click(function () {
 		$scope.fetchPlaceList();
@@ -357,62 +371,62 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		$('#menu-close-btn').click();
 		event.preventDefault();
 		// Make a request
-		apiCall('/get-detail', 'POST', {pid: $(this).attr('data-pid')}).then(
+		apiCall('/get-detail', 'POST', { pid: $(this).attr('data-pid') }).then(
 			function (response) {
 				// Success Callback
 				var items = response.data[0];
 				map.flyTo({ center: [items["lng"], items["lat"]], zoom: 16 });
 
 				// Add big image and thumbnail gallery
-		var photoPreviewHtml = `
+				var photoPreviewHtml = `
 		<div class="col-sm-12">
 		<img id="main-photo" src="${items.photo1}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
 		</div>
 		<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
-for (var i = 1; i <= 10; i++) {
-	var photo = items["photo" + i];
-	if (photo && photo !== "undefined") {
-		photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
-	}
-}
-photoPreviewHtml += '</div>';
+				for (var i = 1; i <= 10; i++) {
+					var photo = items["photo" + i];
+					if (photo && photo !== "undefined") {
+						photoPreviewHtml += `<img src="${photo}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photo}'" />`;
+					}
+				}
+				photoPreviewHtml += '</div>';
 
-var videoBlock = '';
-const videoUrl = items["video"];
+				var videoBlock = '';
+				const videoUrl = items["video"];
 
-if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
-	let embedUrl = '';
+				if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
+					let embedUrl = '';
 
-	try {
-		// Handle YouTube links
-		if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-			let youtubeId = '';
+					try {
+						// Handle YouTube links
+						if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+							let youtubeId = '';
 
-			if (videoUrl.includes('youtu.be')) {
-				youtubeId = videoUrl.split('/').pop();
-			} else {
-				const urlObj = new URL(videoUrl);
-				youtubeId = urlObj.searchParams.get("v");
-			}
+							if (videoUrl.includes('youtu.be')) {
+								youtubeId = videoUrl.split('/').pop();
+							} else {
+								const urlObj = new URL(videoUrl);
+								youtubeId = urlObj.searchParams.get("v");
+							}
 
-			if (youtubeId) {
-				embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
-			}
-		}
+							if (youtubeId) {
+								embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+							}
+						}
 
-		// Handle Google Drive links
-		else if (videoUrl.includes('drive.google.com')) {
-			const match = videoUrl.match(/[-\w]{25,}/);
-			if (match && match[0]) {
-				const fileId = match[0];
-				embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-			}
-		}
+						// Handle Google Drive links
+						else if (videoUrl.includes('drive.google.com')) {
+							const match = videoUrl.match(/[-\w]{25,}/);
+							if (match && match[0]) {
+								const fileId = match[0];
+								embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+							}
+						}
 
-		// Embed if valid
-		if (embedUrl) {
-			videoBlock = `
+						// Embed if valid
+						if (embedUrl) {
+							videoBlock = `
 		<div class="col-sm-12" style="margin-bottom: 20px;">
 			<iframe width="100%" height="400"
 				src="${embedUrl}"
@@ -422,12 +436,12 @@ if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
 			</iframe>
 		</div>
 	`;
-		}
-	} catch (err) {
-		console.error("Error parsing video URL:", err);
-	}
-}
-				
+						}
+					} catch (err) {
+						console.error("Error parsing video URL:", err);
+					}
+				}
+
 				$(".table-detail").html(
 					'<div class="row" style="margin-bottom: 150px;">' +
 					// '<div class="flex">' +
@@ -439,14 +453,14 @@ if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
 					// '</div>' +
 					// '</div>' +
 					'<div class="col-sm-12">' +
-					'<p class= "place-name" > ' + items["name"] + '</p >'+
+					'<p class= "place-name" > ' + items["name"] + '</p >' +
 					'<p class="place-desc"><b>สถานที่ตั้ง:</b> ' + items["location"] + '</p>' +
 					'<p class="place-desc"><b>พิกัด:</b> ' + items["lat"] + ', ' + items["lng"] + '</p>' +
 					'</div > ' +
-					'<div class="col-sm-12"><img src="' + items["imgfeatured"] + '" alt="" style="height:350px;margin-bottom: 20px;"></div>' +
+					'<div class="col-sm-12"><img src="' + transformDriveUrl(items["imgfeatured"])  + '" alt="" style="height:350px;margin-bottom: 20px;"></div>' +
 					// '<div class="col-sm-12"><p style="font-size: 12px;">ที่มาของรูป: '+items["imgfeatured"]+'</p></div>'+
 					'<div class="col-sm-12">' +
-					videoBlock + 
+					videoBlock +
 
 					'<p class="place-desc"><b>ความเป็นมา:</b> ' + items["description"] + '</p>' +
 					'<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +

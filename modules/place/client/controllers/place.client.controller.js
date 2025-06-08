@@ -10,15 +10,16 @@ placeCtrl.$inject = ['$scope', '$http', '$stateParams'];
 // Helper function to extract photo ID and build display URL
 function transformDriveUrl(url) {
 	try {
-	  const idMatch = url.match(/id=([^&]+)/);
-	  if (idMatch && idMatch[1]) {
-		return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
-	  }
+		const idMatch = url.match(/id=([^&]+)/);
+		if (idMatch && idMatch[1]) {
+			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1024`;
+		}
 	} catch (e) {
-	  console.warn('Invalid photo URL:', url);
+		console.warn('Invalid photo URL:', url);
 	}
 	return ''; // fallback
 }
+
   
 function placeCtrl($scope, $http, $stateParams) {
 	// Function to make API calls
