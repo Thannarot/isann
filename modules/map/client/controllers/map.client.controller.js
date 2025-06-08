@@ -125,7 +125,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	var map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v11',
-		zoom: 9,
+		zoom: 6,
 		center: [103.226720, 16.617660]
 	});
 
