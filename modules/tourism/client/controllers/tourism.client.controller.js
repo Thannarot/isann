@@ -18,7 +18,7 @@ angular.module('core').controller('tourismCtrl', function ($scope, $http) {
 		try {
 			const idMatch = url.match(/id=([^&]+)/);
 			if (idMatch && idMatch[1]) {
-				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1024`;
+				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1290`;
 			}
 		} catch (e) {
 			console.warn('Invalid photo URL:', url);
