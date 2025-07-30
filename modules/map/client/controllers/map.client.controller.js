@@ -25,7 +25,6 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		return ''; // fallback
 	}
 
-
 	$scope.listProvinceOptions = function () {
 		// Make a request
 		apiCall('/get-province-list', 'POST', {}).then(
