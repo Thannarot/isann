@@ -155,7 +155,7 @@ exports.filterPlace = function (req, res) {
 	// Add filters only if values are valid
 	if (!isNaN(rating)) main_sql += ` AND rating <= ${rating}`;
 	if (pname !== '') main_sql += ` AND name LIKE '%${pname}%'`;
-	if (ptype !=="9999") main_sql += ` AND tid = ${ptype}`;
+	if (ptype !== "9999") main_sql += ` AND tid = ${ptype}`;
 	if (adm1 !== '') main_sql += ` AND id_1 = ${adm1}`;
 	if (adm2 !== '') main_sql += ` AND adm2 = ${adm2}`;
 	if (adm3 !== '') main_sql += ` AND adm3 = ${adm3}`;
@@ -318,8 +318,6 @@ exports.addNewPlace = function (req, res) {
         photo6, photo7, photo8, photo9, photo10
     ) VALUES ${val_params};
 `;
-
-
 	db.any(query)
 		.then(data => {
 			// success
@@ -427,4 +425,76 @@ exports.validateAdminLogin = function (req, res) {
 		console.log("Password mismatch!");
 		return res.status(401).json({ error: "Invalid password" });
 	}
+};
+
+exports.addNewHomeImg = function (req, res) {
+	const params = req.body;
+	const val_params = `(
+		'${params.link}'
+	)`;
+
+	const query = `
+		INSERT INTO ela_home_img (
+			link
+		) VALUES ${val_params};
+	`;
+
+	db.any(query)
+		.then(data => {
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error);
+			console.log('ERROR');
+		});
+};
+
+exports.editHomeImg = function (req, res) {
+	var params = req.body;
+	var pid = params.pid;
+	var link = "link='" + params.link + "',";
+	var status = "status=" + params.status + ",";
+	var allFields = link + status;
+	allFields = allFields.slice(0, -1);
+	// Construct the SQL query
+	var query = "UPDATE ela_home_img SET " + allFields + " WHERE pid=" + pid
+	db.any(query)
+		.then(data => {
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error);
+			console.log('ERROR');
+		});
+};
+
+exports.getHomeImgs = function (req, res) {
+	db.any("SELECT * FROM ela_home_img")
+		.then(data => {
+			// success
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error); // print the error;
+			console.log('ERROR');
+		});
+};
+
+exports.deleteHomeImg = function (req, res) {
+	var params = req.params;
+	var pid = params.id;
+	var query = "DELETE FROM ela_home_img WHERE id=" + pid;
+	db.any(query)
+		.then(data => {
+			// success
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error);
+			console.log('ERROR');
+		});
 };

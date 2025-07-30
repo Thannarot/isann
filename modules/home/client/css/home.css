@@ -28,6 +28,7 @@ body {
   height: 65vh; /* Make the image cover the container's height */
   object-fit: cover; /* Keeps the image proportionally scaled */
   width: 100%;
+  height: auto;
 }
 
 
@@ -39,6 +40,7 @@ body {
   position: absolute;
   bottom: 8px;
   width: 100%;
+  height: auto;
   text-align: center;
 }
 

@@ -1,5 +1,5 @@
 <div ui-view="nav"></div>
-<div ng-controller="managementCtl" style="margin-bottom: 150px;">
+<div ng-controller="homeImgManagementCtl">
   <div class="container dark-bg">
     <h2 class='mb-3'>ระบบจัดการข้อมูล</h2>
     <div class="flex">
@@ -14,27 +14,21 @@
     <table id="dtBasicExample" class="table" width="100%">
       <thead>
         <tr>
-          <th class="th-sm">สถานที่
+          <th class="th-sm">Item
           </th>
-          <th class="th-sm">สถานที่ตั้ง
+          <th class="th-sm">Image URL
           </th>
-          <th class="th-sm">ละติจูด
-          </th>
-          <th class="th-sm">ลองจิจูด
-          </th>
-          <th class="th-sm">ดำเนินการ
+          <th class="th-sm">Status
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="x in placeList">
-          <td>[[x.name]]</td>
-          <td>[[x.location]]</td>
-          <td>[[x.lat]]</td>
-          <td>[[x.lng]]</td>
+        <tr ng-repeat="x in HomeImgs">
+          <td>[[x.id]]</td>
+          <td>[[x.link]]</td>
           <td>
-            <a href="/form-edit/pid=[[x.pid]]" class="btn btn-default btn-sm">Edit</a>
-            <a href="#" class="btn btn-danger btn-sm btn-delete" data-pid="[[x.pid]]">Delete</a>
+            <!-- <a href="/form-edit/pid=[[x.pid]]" class="btn btn-default btn-sm">Edit</a> -->
+            <a href="#" class="btn btn-danger btn-sm btn-delete" data-id="[[x.id]]">Delete</a>
           </td>
         </tr>
 

@@ -18,7 +18,7 @@ angular.module('core').controller('cafeCtrl', function ($scope, $http) {
 		try {
 		const idMatch = url.match(/id=([^&]+)/);
 		if (idMatch && idMatch[1]) {
-			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1290`;
+			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s2580`;
 		}
 		} catch (e) {
 		console.warn('Invalid photo URL:', url);
@@ -48,7 +48,6 @@ angular.module('core').controller('cafeCtrl', function ($scope, $http) {
 			  <ul class="card-info">
 				<li>📍 Location: `+ placeLocation + `</li>
 	
-				<li>🌟 Rating: `+ rating + `</li>
 			  </ul>
 			  <a href="/place/`+pid+`" class="card-button">อ่านเพิ่มเติม</a>
 			</div>

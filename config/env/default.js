@@ -2,7 +2,7 @@
 
 module.exports = {
   app: {
-    title: 'I-Laa Kha-La',
+    title: 'ilaakhalao',
     description: 'The Elevated Wellness Tourism of Isaan with Digital Platform',
     keywords: 'สถานที่ท่่องเที่ยว, อีสาน, ประเทศไทย',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'

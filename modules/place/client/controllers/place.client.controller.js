@@ -12,7 +12,7 @@ function transformDriveUrl(url) {
 	try {
 		const idMatch = url.match(/id=([^&]+)/);
 		if (idMatch && idMatch[1]) {
-			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1290`;
+			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s2580`;
 		}
 	} catch (e) {
 		console.warn('Invalid photo URL:', url);
@@ -20,7 +20,6 @@ function transformDriveUrl(url) {
 	return ''; // fallback
 }
 
-  
 function placeCtrl($scope, $http, $stateParams) {
 	// Function to make API calls
 	var apiCall = function (url, method, data) {
@@ -32,7 +31,6 @@ function placeCtrl($scope, $http, $stateParams) {
 		});
 	};
 
-
 	// Function to create cards from response
 	$scope.createCard = function (response) {
 		$("#content").html('');
@@ -41,16 +39,16 @@ function placeCtrl($scope, $http, $stateParams) {
 		// Add big image and thumbnail gallery
 		var photoPreviewHtml = `
 		<div class="col-sm-12">
-			<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+			<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:auto; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
 		</div>
 		<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
 		for (var i = 1; i <= 10; i++) {
-		var rawUrl = items["photo" + i];
-		if (rawUrl && rawUrl !== "undefined") {
-			var photoUrl = transformDriveUrl(rawUrl);
-			photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
-		}
+			var rawUrl = items["photo" + i];
+			if (rawUrl && rawUrl !== "undefined") {
+				var photoUrl = transformDriveUrl(rawUrl);
+				photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
+			}
 		}
 
 		photoPreviewHtml += '</div>';
@@ -113,10 +111,10 @@ function placeCtrl($scope, $http, $stateParams) {
 			'<div class="col-sm-12"><img src="' + transformDriveUrl(items["imgfeatured"]) + '" alt="" style="width:100%;margin-bottom: 20px;"></div>' +
 
 			'<div class="col-sm-12">' +
-			videoBlock + 
+			videoBlock +
 			'<p class="place-desc"><b>สถานที่ตั้ง:</b> ' + items["location"] + '</p>' +
 			'<p class="place-desc"><b>พิกัด:</b> ' + items["lat"] + ', ' + items["lng"] + '</p>' +
-			
+
 			'<p class="place-desc"><b>ความเป็นมา:</b> ' + items["description"] + '</p>' +
 			'<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +
 			'<div class="col-sm-12" style="margin-bottom: 15px;">' +
@@ -140,7 +138,7 @@ function placeCtrl($scope, $http, $stateParams) {
 			'</div>' +
 
 
-			'<p class="place-desc"><b>สิ่งอำนวยความสะดวก เพิ่มเติม:</b> ' + items["description"] + '</p>' +
+			// '<p class="place-desc"><b>สิ่งอำนวยความสะดวก เพิ่มเติม:</b> ' + items["description"] + '</p>' +
 			'<p class="place-desc"><b>อัตราค่าบริการ:</b> ' + items["entrance_fee"] + '</p>' +
 			'<p class="place-desc"><b>ร้านค้าสวัสดิการ:</b> ' + items["store"] + '</p>' +
 			'<p class="place-desc"><b>สัญญาณโทรศัพท์ในพื้นที่:</b> ' + items["cellular_net"] + '</p>' +

@@ -93,25 +93,41 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 
 	$scope.listPlaceTypeOptions = function () {
-		// Make a request
 		apiCall('get-placetype-list', 'POST', {}).then(
 			function (response) {
-				// Success Callback
-				var items = response.data;
-				$.each(items, function (i, item) {
-					$('#ptype_selector').append($('<option>', {
-						value: item.tid,
-						text: item.name_th
-					}));
+				const items = response.data;
+				const grouped = {};
+	
+				// Group items by `group` field
+				items.forEach(item => {
+					if (!grouped[item.group]) {
+						grouped[item.group] = [];
+					}
+					grouped[item.group].push(item);
 				});
+	
+				// Clear existing options
+				$('#ptype_selector').empty();
+	
+				// Create optgroups
+				for (const [groupName, options] of Object.entries(grouped)) {
+					const $optgroup = $('<optgroup>', { label: groupName });
+	
+					options.forEach(item => {
+						$optgroup.append($('<option>', {
+							value: item.tid,
+							text: item.name_th
+						}));
+					});
+	
+					$('#ptype_selector').append($optgroup);
+				}
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('ERROR: ' + error);
 			}
 		);
 	};
-
 
 	$scope.listProvinceOptions();
 

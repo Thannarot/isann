@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 angular.module('core').controller('mapCtrl', function ($scope, $http) {
@@ -19,7 +17,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		try {
 			const idMatch = url.match(/id=([^&]+)/);
 			if (idMatch && idMatch[1]) {
-				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s1290`;
+				return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s2480`;
 			}
 		} catch (e) {
 			console.warn('Invalid photo URL:', url);
@@ -48,9 +46,15 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		);
 	};
 
-
 	$scope.listCityOptions = function () {
 		const prov_id = $('#province_selector').val();
+
+		if (!prov_id) {
+			// If no province is selected, clear the city selector
+			$('#city_selector').html('');
+			$('#township_selector').html('');
+			return;
+		}
 		// Make a request
 		apiCall('/get-city-list', 'POST', { prov_id: prov_id }).then(
 			function (response) {
@@ -74,6 +78,11 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 
 	$scope.listTownshipOptions = function () {
 		const dist_id = $('#city_selector').val();
+		if (!dist_id) {
+			// If no city is selected, clear the township selector
+			$('#township_selector').html('');
+			return;
+		}
 		// Make a request
 		apiCall('/get-township-list', 'POST', { dist_id: dist_id }).then(
 			function (response) {
@@ -96,30 +105,47 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 	};
 
 	$scope.listPlaceTypeOptions = function () {
-		// Make a request
-		apiCall('/get-placetype-list', 'POST', {}).then(
+		apiCall('get-placetype-list', 'POST', {}).then(
 			function (response) {
-				// Success Callback
-				var items = response.data;
-				$.each(items, function (i, item) {
-					$('#type_selector').append($('<option>', {
-						value: item.tid,
-						text: item.name_th
-					}));
+				const items = response.data;
+				const grouped = {};
+	
+				// Group items by `group` field
+				items.forEach(item => {
+					if (!grouped[item.group]) {
+						grouped[item.group] = [];
+					}
+					grouped[item.group].push(item);
 				});
+	
+				// Clear existing options
+				$('#ptype_selector').empty();
+	
+				// Create optgroups
+				for (const [groupName, options] of Object.entries(grouped)) {
+					const $optgroup = $('<optgroup>', { label: groupName });
+	
+					options.forEach(item => {
+						$optgroup.append($('<option>', {
+							value: item.tid,
+							text: item.name_th
+						}));
+					});
+	
+					$('#ptype_selector').append($optgroup);
+				}
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('ERROR: ' + error);
 			}
 		);
 	};
 
 
 	$scope.listProvinceOptions();
-	$scope.listCityOptions();
 	$scope.listTownshipOptions();
 	$scope.listPlaceTypeOptions();
+	// $scope.listCityOptions();
 
 	mapboxgl.accessToken = 'pk.eyJ1IjoidGhhbm5hcm90IiwiYSI6ImNrOXFzZjgzcjA2OTczZXFrbXV4Z3lzejUifQ.4CmrqCen0XTYYYCjcWGrzg';
 	var map = new mapboxgl.Map({
@@ -133,12 +159,6 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		navigator.geolocation.getCurrentPosition(position => {
 			$("#geo-lat").val(position.coords.latitude);
 			$("#geo-lng").val(position.coords.longitude);
-			// var map = new mapboxgl.Map({
-			//   container: 'map',
-			//   style: 'mapbox://styles/mapbox/light-v10',
-			//   center: [position.coords.longitude, position.coords.latitude],
-			//  zoom: 14
-			// });
 		});
 	} else {
 		console.log("Geolocation is not available")
@@ -253,9 +273,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		grid: true,
 		from: 5
 	});
-
 	var distanceSlider = document.getElementById('slider-distance');
-
 	$('#province_selector').change(function () {
 		$scope.listCityOptions();
 	});
@@ -301,7 +319,6 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		$('#dark-v10').removeClass('active');
 	});
 
-
 	$('.branding').click(function () {
 		$("#menuSidenav").css("width", "300px");
 		$(".main").css("marginLeft", "300px");
@@ -328,7 +345,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 
 	$("#filter-btn").click(function () {
 		var pname = $("#pname").val();
-		var ptype = $("#type_selector").val();
+		var ptype = $("#ptype_selector").val();
 		var distance = $("#slider-distance").val();
 		var rating = $("#slider-rating").val();
 		var adm1 = $("#province_selector").val();
@@ -361,11 +378,9 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			});
 	});
 
-
 	$("#filter-all-btn").click(function () {
 		$scope.fetchPlaceList();
 	});
-
 
 	$(document).on('click', '.liPlaceName', function (event) {
 		$('#menu-close-btn').click();
@@ -380,7 +395,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 				// Add big image and thumbnail gallery
 				var photoPreviewHtml = `
 				<div class="col-sm-12">
-					<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:400px; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
+					<img id="main-photo" src="${transformDriveUrl(items.photo1)}" style="width:100%; height:auto; object-fit:cover; border-radius:8px; margin-bottom:15px;" />
 				</div>
 				<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
@@ -393,14 +408,10 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 				}
 
 				photoPreviewHtml += '</div>';
-
-
 				var videoBlock = '';
 				const videoUrl = items["video"];
-
 				if (videoUrl && videoUrl !== 'undefined' && videoUrl.trim() !== '') {
 					let embedUrl = '';
-
 					try {
 						// Handle YouTube links
 						if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
@@ -430,15 +441,15 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 						// Embed if valid
 						if (embedUrl) {
 							videoBlock = `
-		<div class="col-sm-12" style="margin-bottom: 20px;">
-			<iframe width="100%" height="400"
-				src="${embedUrl}"
-				frameborder="0"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				allowfullscreen>
-			</iframe>
-		</div>
-	`;
+								<div class="col-sm-12" style="margin-bottom: 20px;">
+									<iframe width="100%" height="400"
+										src="${embedUrl}"
+										frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen>
+									</iframe>
+								</div>
+							`;
 						}
 					} catch (err) {
 						console.error("Error parsing video URL:", err);
@@ -466,28 +477,28 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					videoBlock +
 
 					'<p class="place-desc"><b>ความเป็นมา:</b> ' + items["description"] + '</p>' +
-					'<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +
-					'<div class="col-sm-12">' +
-					'<select class="js-example-basic-multiple" id="facilities_selects" name="facilities_selects[]" multiple="multiple" style="width: 100%;margin-bottom:15px;" disabled>' +
-					'<option value="01">มีที่จอดรถ</option>' +
-					'<option value="02">ทางลาดยาว ความชันไม่เกิน 4.76 องศาและมีราวจับ</option>' +
-					'<option value="03">ห้องน้ำและห้องส้วม สามารถเปิดปิดได้ง่ายและมีราวจับ</option>' +
-					'<option value="04">ห้องน้ำและห้องส้วม พื้นไม่ลื่น</option>' +
-					'<option value="05">มีป้ายสัญลักษณ์ชัดเจน มองเห็นได้ง่าย</option>' +
-					'<option value="06">มีที่นั่งพัก ทุกระยะ 200เมตร</option>' +
-					'<option value="07">มีบริการที่เก้าอี้เข็น</option>' +
-					'<option value="08">มียาสามัญประจำบ้าน อุปกรณ์ปฐมพยาบาลสำหรับผู้สูงอายุ ที่ไม่หมดอายุและจัดเตรียมไว้ในจุดที่เหมาะสม</option>' +
-					'<option value="09">มีตำแหน่งใกล้กับสถานพยาบาลสมารถให้บริการได้อย่างมีประสิทธิภาพและรวดเร็ว</option>' +
-					'<option value="10">มีหน่วยพยาบาล ห้องพยาบาล</option>' +
-					'<option value="11">มีบริการเคลื่อนย้ายผู้สูงอายุ</option>' +
-					'<option value="12">มีลิฟต์ หรือบันได้ที่อำนวยความสะดวก</option>' +
-					'<option value="13">มีการเข้าถึงอินเตอร์เน็ต</option>' +
-					'<option value="14">มีห้องพักใกล้บันไดหนีไฟ หรือลิฟต์</option>' +
-					'<option value="15">ห้องพักมีสัญญานบอกเหตุ หรือเตือนภัย</option>' +
-					'</select>' +
-					'</div>' +
+					// '<p class="place-desc"><b>สิ่งอำนวยความสะดวก:</b></p>' +
+					// '<div class="col-sm-12">' +
+					// '<select class="js-example-basic-multiple" id="facilities_selects" name="facilities_selects[]" multiple="multiple" style="width: 100%;margin-bottom:15px;" disabled>' +
+					// '<option value="01">มีที่จอดรถ</option>' +
+					// '<option value="02">ทางลาดยาว ความชันไม่เกิน 4.76 องศาและมีราวจับ</option>' +
+					// '<option value="03">ห้องน้ำและห้องส้วม สามารถเปิดปิดได้ง่ายและมีราวจับ</option>' +
+					// '<option value="04">ห้องน้ำและห้องส้วม พื้นไม่ลื่น</option>' +
+					// '<option value="05">มีป้ายสัญลักษณ์ชัดเจน มองเห็นได้ง่าย</option>' +
+					// '<option value="06">มีที่นั่งพัก ทุกระยะ 200เมตร</option>' +
+					// '<option value="07">มีบริการที่เก้าอี้เข็น</option>' +
+					// '<option value="08">มียาสามัญประจำบ้าน อุปกรณ์ปฐมพยาบาลสำหรับผู้สูงอายุ ที่ไม่หมดอายุและจัดเตรียมไว้ในจุดที่เหมาะสม</option>' +
+					// '<option value="09">มีตำแหน่งใกล้กับสถานพยาบาลสมารถให้บริการได้อย่างมีประสิทธิภาพและรวดเร็ว</option>' +
+					// '<option value="10">มีหน่วยพยาบาล ห้องพยาบาล</option>' +
+					// '<option value="11">มีบริการเคลื่อนย้ายผู้สูงอายุ</option>' +
+					// '<option value="12">มีลิฟต์ หรือบันได้ที่อำนวยความสะดวก</option>' +
+					// '<option value="13">มีการเข้าถึงอินเตอร์เน็ต</option>' +
+					// '<option value="14">มีห้องพักใกล้บันไดหนีไฟ หรือลิฟต์</option>' +
+					// '<option value="15">ห้องพักมีสัญญานบอกเหตุ หรือเตือนภัย</option>' +
+					// '</select>' +
+					// '</div>' +
 
-					'<p class="place-desc"><b>สิ่งอำนวยความสะดวก เพิ่มเติม:</b> ' + items["description"] + '</p>' +
+					// '<p class="place-desc"><b>สิ่งอำนวยความสะดวก เพิ่มเติม:</b> ' + items["description"] + '</p>' +
 					'<p class="place-desc"><b>อัตราค่าบริการ:</b> ' + items["entrance_fee"] + '</p>' +
 					'<p class="place-desc"><b>ร้านค้าสวัสดิการ:</b> ' + items["store"] + '</p>' +
 					'<p class="place-desc"><b>สัญญาณโทรศัพท์ในพื้นที่:</b> ' + items["cellular_net"] + '</p>' +
