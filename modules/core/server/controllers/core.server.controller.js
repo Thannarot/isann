@@ -140,15 +140,16 @@ exports.getCafe = function (req, res) {
 exports.filterPlace = function (req, res) {
 	var params = req.body;
 	// Ensure parameters have default values
-	var pname = params.pname !== undefined ? params.pname : '';
-	var distance = params.distance !== undefined ? parseFloat(params.distance) : 0;
-	var rating = params.rating !== undefined ? parseFloat(params.rating) : 5;
-	var ptype = params.ptype !== undefined ? params.ptype : "9999";
-	var adm1 = params.adm1 !== undefined ? params.adm1 : '';
-	var adm2 = params.adm2 !== undefined ? params.adm2 : '';
-	var adm3 = params.adm3 !== undefined ? params.adm3 : '';
-	var lat = params.geolocate_lat !== undefined ? parseFloat(params.geolocate_lat) : null;
-	var lng = params.geolocate_lng !== undefined ? parseFloat(params.geolocate_lng) : null;
+	const pname = params.pname ?? '';
+	const distance = params.distance != null ? parseFloat(params.distance) : 0;
+	const rating = params.rating != null ? parseFloat(params.rating) : 5;
+	const ptype = params.ptype ?? '9999';
+	const adm1 = params.adm1 ?? '';
+	const adm2 = params.adm2 ?? '';
+	const adm3 = params.adm3 ?? '';
+	const lat = params.geolocate_lat != null ? parseFloat(params.geolocate_lat) : 0;
+	const lng = params.geolocate_lng != null ? parseFloat(params.geolocate_lng) : 0;
+	
 
 	var main_sql = "SELECT * FROM ela_places JOIN ela_district ON adm2 = ela_district.id_2 WHERE 1=1";
 

@@ -44,3 +44,4 @@ module.exports = function (app) {
   // app.route('/action=edit-place&pid=:pid?&pname=:pname&plat=:plat&plng=:plng&desc=:desc&entrance_fee=:entrance_fee&store=:store&cellular_net=:cellular_net&travel=:travel&agency=:agency&plocation=:plocation&gmap=:gmap&infosource=:infosource&photosource=:photosource&extralink=:extralink&facilities=:facilities&contactinfo=:contactinfo&ptype=:ptype?&adm1=:adm1?&adm2=:adm2?&adm3=:adm3?&rating=:rating??&imgfeatured=:imgfeatured?&facilitiesList=:facilitiesList&video=:video&photo1=:photo1&photo2=:photo2&photo3=:photo3&photo4=:photo4&photo5=:photo5&photo6=:photo6&photo7=:photo7&photo8=:photo8&photo9=:photo9&photo10=:photo10').post(core.editPlace);
 
 };
+
