@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('core').controller('travelCtrl', function ($scope, $http) {
+angular.module('core').controller('travelCtrl', function ($scope, $http, $sce) {
 
 	var apiCall = function (url, method) {
 		return $http({
@@ -12,8 +12,20 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 
 	let currentLocation = null;
 	let currentMarker = null;
-	let destinationLocation = null; // <== new: store selected destination
+	let destinationLocation = null;
 	let map;
+	let destinationLocations = [];
+	$scope.destinations = [];
+	$scope.trustedDestinationsHtml = null;
+
+	function updateDestinationListHtml() {
+		let html = '<h3>จุดหมายที่เลือก:</h3><ol>';
+		for (let d of $scope.destinations) {
+			html += `<li>📍 ${d.name} - ${d.location}</li>`;
+		}
+		html += '</ol>';
+		$scope.trustedDestinationsHtml = $sce.trustAsHtml(html);
+	}
 
 	$scope.createMarker = function (response) {
 		for (var i = 0; i < response.data.length; i++) {
@@ -30,10 +42,18 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 				.addTo(map);
 
 			marker.getElement().addEventListener('click', () => {
-				destinationLocation = [lng, lat];
-				console.log("Destination set to:", destinationLocation);
-				alert(`ตั้งปลายทางเป็น ${placeName}`);
+				destinationLocations.push([lng, lat]);
+				$scope.$apply(() => {
+					$scope.destinations.push({
+						name: placeName,
+						location: placeLocation,
+						lat: lat,
+						lng: lng
+					});
+					updateDestinationListHtml(); // update HTML
+				});
 			});
+
 		}
 	};
 
@@ -86,15 +106,32 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 			alert("ตำแหน่งปัจจุบันยังไม่พร้อม");
 			return;
 		}
-		if (!destinationLocation) {
-			alert("กรุณาคลิกที่ marker เพื่อเลือกปลายทาง");
+		if (destinationLocations.length === 0) {
+			alert("กรุณาคลิกที่ marker เพื่อเลือกจุดหมายปลายทาง");
 			return;
 		}
+
+		// Split: first n-1 are waypoints, last is final destination
+		const waypoints = destinationLocations.slice(0, -1)
+			.map(loc => `${loc[1]},${loc[0]}`).join('|');
+		const finalDest = destinationLocations[destinationLocations.length - 1];
+		const finalDestStr = `${finalDest[1]},${finalDest[0]}`;
 		const originStr = `${currentLocation[1]},${currentLocation[0]}`;
-		const destinationStr = `${destinationLocation[1]},${destinationLocation[0]}`;
-		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originStr}&destination=${destinationStr}&travelmode=driving`;
+
+		let googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originStr}&destination=${finalDestStr}&travelmode=driving`;
+		if (waypoints) {
+			googleMapsUrl += `&waypoints=${encodeURIComponent(waypoints)}`;
+		}
+
 		window.open(googleMapsUrl, '_blank');
 	});
 
+
 	$scope.fetchPlaceList();
+
+	$scope.clearDestinations = function () {
+		destinationLocations = [];
+		$scope.destinations = [];
+		$scope.trustedDestinationsHtml = null;
+	  };
 });

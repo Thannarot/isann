@@ -4,6 +4,7 @@
     margin-bottom: 20px;
   }
   #planTripBtn {
+    font-family: 'kanit', sans-serif;
     position: absolute; /* position inside the map container */
     top: 20px;
     right: 20px;
@@ -17,3 +18,46 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     z-index: 1000;
   }
+  .destination-list {
+    font-family: 'kanit', sans-serif;
+    position: absolute;
+    top: 70px; /* just under the button */
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px 16px;
+    border-radius: 6px;
+    max-height: 400px;
+    overflow-y: auto;
+    width: 250px;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+  }
+
+  .destination-list h3 {
+    margin-top: 0;
+    font-size: 14px;
+  }
+
+  .destination-list ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+
+  .destination-list li {
+    margin-bottom: 6px;
+  }
+
+  .clear-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .clear-btn:hover {
+    background-color: #c0392b;
+  }
+  

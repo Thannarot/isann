@@ -1,8 +1,18 @@
 <div ui-view="nav"></div>
 
-<section class="map-section" ng-controller="travelCtrl">
+<section class="map-section" ng-controller="travelCtrl" >
   <div id="map">
     <button id="planTripBtn">วางแผนการเดินทาง</button>
+
+    <!-- Destination List Overlay -->
+    <div class="destination-list" ng-if="trustedDestinationsHtml">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin: 0;">จุดหมายที่เลือก</h3>
+        <button class="clear-btn" ng-click="clearDestinations()">ล้างรายการ</button>
+      </div>
+      <div ng-bind-html="trustedDestinationsHtml"></div>
+    </div>
+    
   </div>
 </section>
 
