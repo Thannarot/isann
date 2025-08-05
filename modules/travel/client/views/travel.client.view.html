@@ -1,9 +1,13 @@
 <div ui-view="nav"></div>
 
-<section class="card-section" ng-controller="travelCtrl">
-  <h1 class="section-title">สถานที่ท่องเที่ยว</h1>
-  <p class="section-subtitle">Explore the best spots in the region</p>
-  <div class="card-container" id="cards"></div>
+<!-- Travel Planning Section -->
+<section class="map-section" ng-controller="travelCtrl">
+  <!-- <h2 class="section-title">วางแผนการเดินทาง</h2> -->
+  <div id="map">
+    <button id="planTripBtn">วางแผนการเดินทาง</button>
+  </div>
+  
 </section>
+
 
 <div ui-view="footer"></div>

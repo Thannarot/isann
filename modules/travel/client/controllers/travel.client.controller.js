@@ -1,11 +1,8 @@
-
-
 'use strict';
 
 angular.module('core').controller('travelCtrl', function ($scope, $http) {
 
 	var apiCall = function (url, method) {
-		//console.log(method, url);
 		return $http({
 			method: method,
 			url: url,
@@ -13,65 +10,91 @@ angular.module('core').controller('travelCtrl', function ($scope, $http) {
 		});
 	};
 
-	// Helper function to extract photo ID and build display URL
-	function transformDriveUrl(url) {
-		try {
-		const idMatch = url.match(/id=([^&]+)/);
-		if (idMatch && idMatch[1]) {
-			return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s2580`;
-		}
-		} catch (e) {
-		console.warn('Invalid photo URL:', url);
-		}
-		return ''; // fallback
-	}
+	let currentLocation = null;
+	let currentMarker = null;
+	let destinationLocation = null; // <== new: store selected destination
+	let map;
 
-	$scope.createCard = function (response) {
-		$("#cards").html('');
+	$scope.createMarker = function (response) {
 		for (var i = 0; i < response.data.length; i++) {
-			var pid = response.data[i]["pid"];
-			var placeName = response.data[i]["name"];
-			var placeLocation = response.data[i]["location"];
-			var lng = response.data[i]["lng"];
-			var lat = response.data[i]["lat"];
-			var placetype = response.data[i]["tid"];
-			var imgfeatured = transformDriveUrl(response.data[i]["imgfeatured"]);
-			var desc = response.data[i]["desc"];
-			var travel = response.data[i]["travel"];
-			var rating = response.data[i]["rating"];
-			// create a HTML element for each feature
+			const pid = response.data[i]["pid"];
+			const placeName = response.data[i]["name"];
+			const placeLocation = response.data[i]["location"];
+			const lng = response.data[i]["lng"];
+			const lat = response.data[i]["lat"];
 
-			var contentHTML = `<div class="card" data-pid="` + pid + `">
-			<img src="`+ imgfeatured + `" alt="" class="card-image">
-			<div class="card-body">
-			  <h2 class="card-title">`+ placeName + `</h2>
-			  <ul class="card-info">
-				<li>📍 Location: `+ placeLocation + `</li>
-	
-				
-			  </ul>
-			  <a href="/place/`+pid+`" class="card-button">อ่านเพิ่มเติม</a>
-			</div>
-		  </div>`;
+			// Add marker with click handler
+			const marker = new mapboxgl.Marker()
+				.setLngLat([lng, lat])
+				.setPopup(new mapboxgl.Popup().setHTML(`<strong>${placeName}</strong><br>${placeLocation}`))
+				.addTo(map);
 
-			$("#cards").append(contentHTML);
+			marker.getElement().addEventListener('click', () => {
+				destinationLocation = [lng, lat];
+				console.log("Destination set to:", destinationLocation);
+				alert(`ตั้งปลายทางเป็น ${placeName}`);
+			});
 		}
-	}
+	};
 
 	$scope.fetchPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'get-tourism' });
-		// Make a request
-		apiCall(getPleaceURL, 'POST').then(
+		const getPlaceURL = '/get-places';
+		apiCall(getPlaceURL, 'POST').then(
 			function (response) {
-				// Success Callback
-				$scope.createCard(response);
+				$scope.createMarker(response);
 			},
 			function (error) {
-				// Error Callback
-				console.log('ERROR: ' + error);
+				console.error('ERROR:', error);
 			}
 		);
 	};
-	$scope.fetchPlaceList();
 
+	// Mapbox setup
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic2FzaWthcm4iLCJhIjoiY21ka2RpeW90MHdmZzJrcTQ2cGppZTNxeSJ9.dK9GWigSYjAulbGr-eDxsg';
+
+	map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v12',
+		center: [101.5, 15.0],
+		zoom: 2
+	});
+
+	const planBtn = document.getElementById('planTripBtn');
+
+	navigator.geolocation.getCurrentPosition(pos => {
+		const lat = pos.coords.latitude;
+		const lng = pos.coords.longitude;
+		currentLocation = [lng, lat];
+
+		if (currentMarker) currentMarker.remove();
+
+		currentMarker = new mapboxgl.Marker({ color: 'red' })
+			.setLngLat(currentLocation)
+			.setPopup(new mapboxgl.Popup().setText("ตำแหน่งปัจจุบันของคุณ"))
+			.addTo(map)
+			.togglePopup();
+
+		map.setCenter(currentLocation);
+		map.setZoom(6);
+		planBtn.style.display = 'block';
+	}, err => {
+		alert("ไม่สามารถเข้าถึงตำแหน่งของคุณได้");
+	});
+
+	planBtn.addEventListener('click', () => {
+		if (!currentLocation) {
+			alert("ตำแหน่งปัจจุบันยังไม่พร้อม");
+			return;
+		}
+		if (!destinationLocation) {
+			alert("กรุณาคลิกที่ marker เพื่อเลือกปลายทาง");
+			return;
+		}
+		const originStr = `${currentLocation[1]},${currentLocation[0]}`;
+		const destinationStr = `${destinationLocation[1]},${destinationLocation[0]}`;
+		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originStr}&destination=${destinationStr}&travelmode=driving`;
+		window.open(googleMapsUrl, '_blank');
+	});
+
+	$scope.fetchPlaceList();
 });

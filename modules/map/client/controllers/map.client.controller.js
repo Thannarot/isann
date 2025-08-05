@@ -108,7 +108,7 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 			function (response) {
 				const items = response.data;
 				const grouped = {};
-	
+
 				// Group items by `group` field
 				items.forEach(item => {
 					if (!grouped[item.group]) {
@@ -116,21 +116,21 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					}
 					grouped[item.group].push(item);
 				});
-	
+
 				// Clear existing options
 				$('#ptype_selector').empty();
-	
+
 				// Create optgroups
 				for (const [groupName, options] of Object.entries(grouped)) {
 					const $optgroup = $('<optgroup>', { label: groupName });
-	
+
 					options.forEach(item => {
 						$optgroup.append($('<option>', {
 							value: item.tid,
 							text: item.name_th
 						}));
 					});
-	
+
 					$('#ptype_selector').append($optgroup);
 				}
 			},
@@ -318,6 +318,69 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 		$('#dark-v10').removeClass('active');
 	});
 
+	// Toggle waterfall layer
+	const visibleLayers = {}; // track which layers are currently on
+	// Apply click handler to all layer toggle items
+	$('li.pointer').click(function () {
+		const layerId = $(this).data('layer-id');
+		const filePath = $(this).data('file');
+		const colorMarker = $(this).data('color');
+		const sourceId = layerId + '-source';
+		const mapLayerId = layerId + '-layer';
+		const isActive = visibleLayers[layerId] === true;
+		if (isActive) {
+			// Remove layer and source
+			if (map.getLayer(mapLayerId)) map.removeLayer(mapLayerId);
+			if (map.getSource(sourceId)) map.removeSource(sourceId);
+			visibleLayers[layerId] = false;
+			$(this).removeClass('active');
+		} else {
+
+			const loadAndAdd = () => {
+				if (!map.getSource(sourceId)) {
+					map.addSource(sourceId, {
+						type: 'geojson',
+						data: filePath
+					});
+					map.addLayer({
+						id: mapLayerId,
+						type: 'circle',
+						source: sourceId,
+						paint: {
+							'circle-radius': 6,
+							'circle-color': colorMarker
+						}
+					});
+					visibleLayers[layerId] = true;
+					$(this).addClass('active');
+
+					// Popup on click
+					map.on('click', mapLayerId, function (e) {
+						const coordinates = e.features[0].geometry.coordinates.slice();
+						const name = e.features[0].properties.Name;
+
+						new mapboxgl.Popup()
+							.setLngLat(coordinates)
+							.setHTML(`<strong>${name}</strong>`)
+							.addTo(map);
+					});
+
+					// Change cursor on hover
+					map.on('mouseenter', mapLayerId, function () {
+						map.getCanvas().style.cursor = 'pointer';
+					});
+					map.on('mouseleave', mapLayerId, function () {
+						map.getCanvas().style.cursor = '';
+					});
+				}
+
+			};
+			loadAndAdd();
+		}
+	});
+
+
+
 	$('.branding').click(function () {
 		$("#menuSidenav").css("width", "300px");
 		$(".main").css("marginLeft", "300px");
@@ -399,11 +462,11 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 				<div class="col-sm-12" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
 
 				for (var i = 1; i <= 10; i++) {
-				var rawUrl = items["photo" + i];
-				if (rawUrl && rawUrl !== "undefined") {
-					var photoUrl = transformDriveUrl(rawUrl);
-					photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
-				}
+					var rawUrl = items["photo" + i];
+					if (rawUrl && rawUrl !== "undefined") {
+						var photoUrl = transformDriveUrl(rawUrl);
+						photoPreviewHtml += `<img src="${photoUrl}" class="thumbnail-img" style="width:100px; height:60px; object-fit:cover; cursor:pointer; border-radius:5px;" onclick="document.getElementById('main-photo').src='${photoUrl}'" />`;
+					}
 				}
 
 				photoPreviewHtml += '</div>';
@@ -565,9 +628,6 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 					.setText('ตำแหน่งของคุณปัจจุบัน')
 			)
 			.addTo(map);
-
 	});
-
-
 
 });

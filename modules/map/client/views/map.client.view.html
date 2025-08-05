@@ -73,7 +73,6 @@
       </div>
     </div>
 
-
     <div class="main">
       <div id="map" style="width: 100%;height: 600px;">
         <div class="control-panel map-component">
@@ -111,7 +110,7 @@
           </ul>
         </div>
 
-        <div class="control-layer map-component">
+        <div class="control-layer map-component" style="left: 120px;">
           <div class="scalebar-container"></div>
           <ul>
             <li class="pointer active" id="streets-v11">
@@ -124,6 +123,16 @@
                 </svg>
               </svg>
               <span>Streets</span>
+            </li>
+            <li class="pointer" id="satellite-v9">
+              <svg class="panel-icon">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-map" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M15.817.613A.5.5 0 0 1 16 1v13a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 14.51l-4.902.98A.5.5 0 0 1 0 15V2a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0l4.902.98 4.902-.98a.5.5 0 0 1 .415.103zM10 2.41l-4-.8v11.98l4 .8V2.41zm1 11.98l4-.8V1.61l-4 .8v11.98zm-6-.8V1.61l-4 .8v11.98l4-.8z" />
+                </svg>
+              </svg>
+              <span>Satellite</span>
             </li>
             <li class="pointer" id="light-v10">
               <svg class="panel-icon">
@@ -143,17 +152,77 @@
               </svg>
               <span>Dark</span>
             </li>
-            <li class="pointer" id="satellite-v9">
-              <svg class="panel-icon">
-                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-map" fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M15.817.613A.5.5 0 0 1 16 1v13a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 14.51l-4.902.98A.5.5 0 0 1 0 15V2a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0l4.902.98 4.902-.98a.5.5 0 0 1 .415.103zM10 2.41l-4-.8v11.98l4 .8V2.41zm1 11.98l4-.8V1.61l-4 .8v11.98zm-6-.8V1.61l-4 .8v11.98l4-.8z" />
-                </svg>
-              </svg>
-              <span>Satellite</span>
-            </li>
+            
+          </ul>
+        </div>
 
+        <div class="control-layer map-component" style="left: 40px;">
+          <div class="scalebar-container"></div>
+          <ul>
+            <li class="pointer" id="waterfall" data-layer-id="waterfall" data-file="/data/waterfall_isaan.geojson" data-color="#007cbf">
+              <span class="marker-color" style="background-color: #007cbf;"></span>
+              <span>น้ำตก</span>
+            </li>
+            <li class="pointer" id="temple" data-layer-id="temple" data-file="/data/temple_isaan.geojson" data-color="#bc9e09">
+              <span class="marker-color" style="background-color: #bc9e09;"></span>
+              <span>วัด</span>
+            </li>
+            <li class="pointer" id="samnaksong" data-layer-id="samnaksong" data-file="/data/samnaksong_isaan.geojson" data-color="#bfb500">
+              <span class="marker-color" style="background-color: #bfb500;"></span>
+              <span>สำนักสงฆ์</span>
+            </li>
+            <li class="pointer" id="mountain" data-layer-id="mountain" data-file="/data/mountain_isaan.geojson" data-color="#83bf00">
+              <span class="marker-color" style="background-color: #83bf00;"></span>
+              <span>ภูเขา</span>
+            </li>
+            <li class="pointer" id="temple" data-layer-id="temple" data-file="/data/temple_isaan.geojson" data-color="#35d38c">
+              <span class="marker-color" style="background-color: #35d38c;"></span>
+              <span>มัสยิด</span>
+            </li>
+            <li class="pointer" id="lake" data-layer-id="lake" data-file="/data/lake_isaan.geojson" data-color="#00bfaf">
+              <span class="marker-color" style="background-color: #00bfaf;"></span>
+              <span>ทะเลสาบ</span>
+            </li>
+            <li class="pointer" id="keang" data-layer-id="keang" data-file="/data/keang_isaan.geojson" data-color="#0a21b9">
+              <span class="marker-color" style="background-color: #0a21b9;"></span>
+              <span>แก่ง</span>
+            </li>
+            <li class="pointer" id="hotspring" data-layer-id="hotspring" data-file="/data/hotspring_isaan.geojson" data-color="#194e6b">
+              <span class="marker-color" style="background-color: #194e6b;"></span>
+              <span>น้ำพุร้อน</span>
+            </li>
+            <li class="pointer" id="hotel" data-layer-id="hotel" data-file="/data/hotel_isaan.geojson" data-color="#8775d9">
+              <span class="marker-color" style="background-color: #8775d9;"></span>
+              <span>โรงแรม</span>
+            </li>
+            <li class="pointer" id="hospital" data-layer-id="hospital" data-file="/data/hospital_isaan.geojson" data-color="#bb98dd">
+              <span class="marker-color" style="background-color: #bb98dd;"></span>
+              <span>โรงพยาบาล</span>
+            </li>
+            <li class="pointer" id="healthcare" data-layer-id="healthcare" data-file="/data/healthcare_isaan.geojson" data-color="#c3a8ea">
+              <span class="marker-color" style="background-color: #c3a8ea;"></span>
+              <span>ศูนย์สุขภาพ</span>
+            </li>
+            <li class="pointer" id="dam" data-layer-id="dam" data-file="/data/dam_isaan.geojson" data-color="#5e0748">
+              <span class="marker-color" style="background-color: #5e0748;"></span>
+              <span>เขื่อน</span>
+            </li>
+            <li class="pointer" id="church" data-layer-id="church" data-file="/data/church_isaan.geojson" data-color="#cd44e9">
+              <span class="marker-color" style="background-color: #cd44e9;"></span>
+              <span>โบสถ์คริสต์</span>
+            </li>
+            <li class="pointer" id="chedi" data-layer-id="chedi" data-file="/data/chedi_isaan.geojson" data-color="#bf0053">
+              <span class="marker-color" style="background-color: #bf0053;"></span>
+              <span>Chedi</span>
+            </li>
+            <li class="pointer" id="cave" data-layer-id="cave" data-file="/data/cave_isaan.geojson" data-color="#6e0327">
+              <span class="marker-color" style="background-color: #6e0327;"></span>
+              <span>ถ้ำ</span>
+            </li>
+            <li class="pointer" id="ิbeach" data-layer-id="ิbeach" data-file="/data/beach_isaan.geojson" data-color="#ff87c7">
+              <span class="marker-color" style="background-color: #ff87c7;"></span>
+              <span>ชายหาด</span>
+            </li>
           </ul>
         </div>
 

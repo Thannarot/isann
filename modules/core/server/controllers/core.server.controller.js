@@ -68,7 +68,6 @@ exports.renderNotFound = function (req, res) {
 };
 
 exports.getPlaces = function (req, res) {
-
 	db.any("SELECT * FROM ela_places")
 		.then(data => {
 			// success
@@ -226,7 +225,6 @@ exports.getTownshipList = function (req, res) {
 
 
 exports.getPlaceTypeList = function (req, res) {
-
 	db.any("SELECT * FROM ela_placetypes")
 		.then(data => {
 			// success
