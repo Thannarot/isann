@@ -19,7 +19,7 @@ angular.module('core').controller('travelCtrl', function ($scope, $http, $sce) {
 	$scope.trustedDestinationsHtml = null;
 
 	function updateDestinationListHtml() {
-		let html = '<h3>จุดหมายที่เลือก:</h3><ol>';
+		let html = '<ol>';
 		for (let d of $scope.destinations) {
 			html += `<li>📍 ${d.name} - ${d.location}</li>`;
 		}

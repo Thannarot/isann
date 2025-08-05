@@ -28,6 +28,6 @@ module.exports = {
   // for obsecurity reasons
   sessionKey: 'sessionId',
   sessionCollection: 'sessions',
-  favicon: 'modules/core/client/img/brand/favicon.ico',
+  favicon: 'modules/core/client/img/phi-ta-khon.png',
 
 };
