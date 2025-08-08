@@ -133,5 +133,81 @@ angular.module('core').controller('travelCtrl', function ($scope, $http, $sce) {
 		destinationLocations = [];
 		$scope.destinations = [];
 		$scope.trustedDestinationsHtml = null;
-	  };
+	};
+
+
+	// Toggle waterfall layer
+	const visibleLayers = {}; // track which layers are currently on
+	// Apply click handler to all layer toggle items
+	$('li.pointer').click(function () {
+		const layerId = $(this).data('layer-id');
+		const filePath = $(this).data('file');
+		const colorMarker = $(this).data('color');
+		const sourceId = layerId + '-source';
+		const mapLayerId = layerId + '-layer';
+		const isActive = visibleLayers[layerId] === true;
+		if (isActive) {
+			// Remove layer and source
+			if (map.getLayer(mapLayerId)) map.removeLayer(mapLayerId);
+			if (map.getSource(sourceId)) map.removeSource(sourceId);
+			visibleLayers[layerId] = false;
+			$(this).removeClass('active');
+		} else {
+
+			const loadAndAdd = () => {
+				if (!map.getSource(sourceId)) {
+					map.addSource(sourceId, {
+						type: 'geojson',
+						data: filePath
+					});
+					map.addLayer({
+						id: mapLayerId,
+						type: 'circle',
+						source: sourceId,
+						paint: {
+							'circle-radius': 6,
+							'circle-color': colorMarker
+						}
+					});
+					visibleLayers[layerId] = true;
+					$(this).addClass('active');
+
+					map.on('click', mapLayerId, function (e) {
+						const coordinates = e.features[0].geometry.coordinates.slice();
+						const name = e.features[0].properties.Name || 'Unnamed';
+						const location = e.features[0].properties.Location || '';
+					
+						// Add to destination lists
+						destinationLocations.push(coordinates);
+						$scope.$apply(() => {
+							$scope.destinations.push({
+								name: name,
+								location: location,
+								lat: coordinates[1],
+								lng: coordinates[0]
+							});
+							updateDestinationListHtml();
+						});
+					
+						// Show popup
+						new mapboxgl.Popup()
+							.setLngLat(coordinates)
+							.setHTML(`<strong>${name}</strong><br>${location}`)
+							.addTo(map);
+					});
+					
+
+					// Change cursor on hover
+					map.on('mouseenter', mapLayerId, function () {
+						map.getCanvas().style.cursor = 'pointer';
+					});
+					map.on('mouseleave', mapLayerId, function () {
+						map.getCanvas().style.cursor = '';
+					});
+				}
+
+			};
+			loadAndAdd();
+		}
+	});
 });

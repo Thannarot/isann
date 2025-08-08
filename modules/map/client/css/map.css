@@ -286,7 +286,7 @@ label {
 
 .control-layer {
   position: absolute;
-  bottom: 12%;
+  bottom: 15%;
   max-width: 80px;
   /* left: 10px; */
   z-index: 999;
