@@ -34,14 +34,26 @@ angular.module('core').controller('travelCtrl', function ($scope, $http, $sce) {
 			const placeLocation = response.data[i]["location"];
 			const lng = response.data[i]["lng"];
 			const lat = response.data[i]["lat"];
-
-			// Add marker with click handler
+	
+			// Create popup instance (reused on hover)
+			const popup = new mapboxgl.Popup({
+				offset: 25,
+				closeButton: false,
+				closeOnClick: false
+			}).setHTML(`<strong>${placeName}</strong><br>${placeLocation}`);
+	
+			// Add marker
 			const marker = new mapboxgl.Marker()
 				.setLngLat([lng, lat])
-				.setPopup(new mapboxgl.Popup().setHTML(`<strong>${placeName}</strong><br>${placeLocation}`))
 				.addTo(map);
-
-			marker.getElement().addEventListener('click', () => {
+	
+			// Show popup on hover
+			const el = marker.getElement();
+			el.addEventListener('mouseenter', () => popup.addTo(map).setLngLat([lng, lat]));
+			el.addEventListener('mouseleave', () => popup.remove());
+	
+			// Keep click handler for adding destination
+			el.addEventListener('click', () => {
 				destinationLocations.push([lng, lat]);
 				$scope.$apply(() => {
 					$scope.destinations.push({
@@ -50,12 +62,12 @@ angular.module('core').controller('travelCtrl', function ($scope, $http, $sce) {
 						lat: lat,
 						lng: lng
 					});
-					updateDestinationListHtml(); // update HTML
+					updateDestinationListHtml();
 				});
 			});
-
 		}
 	};
+	
 
 	$scope.fetchPlaceList = function () {
 		const getPlaceURL = '/get-places';

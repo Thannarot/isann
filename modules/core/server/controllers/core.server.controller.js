@@ -153,7 +153,7 @@ exports.filterPlace = function (req, res) {
 	var main_sql = "SELECT * FROM ela_places JOIN ela_district ON adm2 = ela_district.id_2 WHERE 1=1";
 
 	// Add filters only if values are valid
-	if (!isNaN(rating)) main_sql += ` AND rating <= ${rating}`;
+	// if (!isNaN(rating)) main_sql += ` AND rating <= ${rating}`;
 	if (pname !== '') main_sql += ` AND name LIKE '%${pname}%'`;
 	if (ptype !== "9999") main_sql += ` AND tid = ${ptype}`;
 	if (adm1 !== '') main_sql += ` AND id_1 = ${adm1}`;

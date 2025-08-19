@@ -421,6 +421,18 @@ label {
 .marker.marker-coffee {
   background-image: url('../img/icons/coffee.png');
 }
+.marker.marker-other {
+  background-image: url('../img/icons/farm.png');
+}
+
+.marker-default-circle {
+  width: 10px;
+  height: 10px;
+  background-color: #007bff; /* blue circle */
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
 .marker.geolocation{
   width:20px;
   height: 20px;

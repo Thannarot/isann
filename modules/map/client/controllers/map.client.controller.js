@@ -195,6 +195,8 @@ angular.module('core').controller('mapCtrl', function ($scope, $http) {
 				el.className = 'marker marker-health';
 			} else if (placetype === 8) {
 				el.className = 'marker marker-farm';
+			} else {
+				el.className = 'marker marker-default-circle';
 			}
 			// make a marker for each feature and add to the map
 			new mapboxgl.Marker(el)
