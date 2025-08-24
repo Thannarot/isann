@@ -17,6 +17,8 @@ module.exports = function (app) {
   // app.route('/action=map-data&index=:index?&timeFrequency=:timeFrequency&date=:date?').post(core.getMapData);
   // app.route('/action=graph-data&index=:index?').post(core.getGraphData);
   app.route('/action=get-tourism').post(core.getTourism);
+  app.route('/action=get-tourism2').post(core.getTourism2);
+  app.route('/action=get-tourism3').post(core.getTourism3);
   app.route('/action=get-hotel').post(core.getHotel);
   app.route('/action=get-resturant').post(core.getResturant);
   app.route('/action=get-cafe').post(core.getCafe);

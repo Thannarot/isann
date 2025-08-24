@@ -62,7 +62,7 @@ angular.module('core').controller('tourismCtrl', function ($scope, $http) {
 	}
 
 	$scope.fetchPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'get-tourism' });
+		var getPleaceURL = '/' + $.param({ action: 'get-tourism2' });
 		// Make a request
 		apiCall(getPleaceURL, 'POST').then(
 			function (response) {

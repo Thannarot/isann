@@ -9,16 +9,16 @@
 
 	function routeConfig($stateProvider) {
 		$stateProvider
-			.state('hotel', {
-				url: '/hotel',
+			.state('tourism3', {
+				url: '/tourism3',
 				views: {
 					'': { 
-						templateUrl: 'modules/hotel/client/views/hotel.client.view.html' 
+						templateUrl: 'modules/tourism3/client/views/tourism3.client.view.html' 
 					},
-					'nav@hotel': { 
+					'nav@tourism3': { 
 						templateUrl: 'modules/navigation/client/views/navigation.client.view.html' 
 					},
-					'footer@hotel': { 
+					'footer@tourism3': { 
 						templateUrl: 'modules/footer/client/views/footer.client.view.html' 
 					}
 				}

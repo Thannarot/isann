@@ -93,41 +93,93 @@ angular.module('form-edit').controller('formEditCtl', function ($scope, $state, 
 
 
 	$scope.listPlaceTypeOptions = function () {
-		apiCall('get-placetype-list', 'POST', {}).then(
-			function (response) {
-				const items = response.data;
-				const grouped = {};
-	
-				// Group items by `group` field
-				items.forEach(item => {
-					if (!grouped[item.group]) {
-						grouped[item.group] = [];
-					}
-					grouped[item.group].push(item);
+		apiCall('get-placetype-list', 'POST').then(
+		  function (response) {
+			const items = Array.isArray(response.data) ? response.data : [];
+	  
+			// Build: { group: { subgroups: { [subgroup]: item[] }, ungrouped: item[] } }
+			const groups = {};
+			items.forEach((it) => {
+			  const g = (it.group || 'อื่น ๆ').trim();
+			  const sg = it.subgroup && String(it.subgroup).trim() ? String(it.subgroup).trim() : null;
+	  
+			  if (!groups[g]) groups[g] = { subgroups: {}, ungrouped: [] };
+			  if (sg) {
+				if (!groups[g].subgroups[sg]) groups[g].subgroups[sg] = [];
+				groups[g].subgroups[sg].push(it);
+			  } else {
+				groups[g].ungrouped.push(it);
+			  }
+			});
+	  
+			const $sel = $('#ptype_selector');
+			$sel.empty();
+	  
+			Object.keys(groups).forEach((groupName) => {
+			  const node = groups[groupName];
+			  const $group = $('<optgroup>', { label: groupName });
+	  
+			  // Each subgroup → subtitle row from res.subgroup, then its options
+			  Object.keys(node.subgroups).forEach((subName) => {
+				// Subtitle from API's subgroup value
+				$group.append(
+				  $('<option>', {
+					text: `— ${subName} —`,
+					disabled: true
+				  }).attr({
+					'data-meta': 'subgroup-title',
+					'data-group': groupName,
+					'data-subgroup': subName
+				  })
+				);
+	  
+				node.subgroups[subName].forEach((item) => {
+				  $group.append(
+					$('<option>', {
+					  value: item.tid,
+					  // Indent child options under the subtitle
+					  text: `\u00A0\u00A0• ${item.name_th}`
+					}).attr({
+					  'data-group': groupName,
+					  'data-subgroup': subName
+					})
+				  );
 				});
-	
-				// Clear existing options
-				$('#ptype_selector').empty();
-	
-				// Create optgroups
-				for (const [groupName, options] of Object.entries(grouped)) {
-					const $optgroup = $('<optgroup>', { label: groupName });
-	
-					options.forEach(item => {
-						$optgroup.append($('<option>', {
-							value: item.tid,
-							text: item.name_th
-						}));
-					});
-	
-					$('#ptype_selector').append($optgroup);
-				}
-			},
-			function (error) {
-				console.error('ERROR: ' + error);
-			}
+			  });
+	  
+			  // Items with no subgroup
+			  if (node.ungrouped.length) {
+				$group.append(
+				  $('<option>', {
+					text: '——',
+					disabled: true
+				  }).attr({
+					'data-meta': 'subgroup-title',
+					'data-group': groupName,
+					'data-subgroup': ''
+				  })
+				);
+				node.ungrouped.forEach((item) => {
+				  $group.append(
+					$('<option>', {
+					  value: item.tid,
+					  text: `\u00A0\u00A0• ${item.name_th}`
+					}).attr({
+					  'data-group': groupName,
+					  'data-subgroup': ''
+					})
+				  );
+				});
+			  }
+	  
+			  $sel.append($group);
+			});
+		  },
+		  function (error) {
+			console.error('ERROR:', error);
+		  }
 		);
-	};
+	  };
 
 	$scope.listProvinceOptions();
 

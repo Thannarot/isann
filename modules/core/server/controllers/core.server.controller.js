@@ -94,6 +94,34 @@ exports.getTourism = function (req, res) {
 		});
 };
 
+exports.getTourism2 = function (req, res) {
+
+	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงสุขภาพเชิงการแพทย์';`)
+		.then(data => {
+			// success
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error); // print the error;
+			console.log('ERROR');
+		});
+};
+
+exports.getTourism3 = function (req, res) {
+
+	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงส่งเสริมสุขภาพ';`)
+		.then(data => {
+			// success
+			res.setHeader("Content-Type", "application/json");
+			res.send(JSON.stringify(data));
+		})
+		.catch(error => {
+			console.log('ERROR:', error); // print the error;
+			console.log('ERROR');
+		});
+};
+
 exports.getHotel = function (req, res) {
 
 	db.any("SELECT * FROM ela_places where tid=2")

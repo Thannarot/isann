@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('core').controller('hotelCtrl', function ($scope, $http) {
+angular.module('core').controller('tourism3Ctrl', function ($scope, $http) {
 
 	var apiCall = function (url, method) {
 		//console.log(method, url);
@@ -60,7 +60,7 @@ angular.module('core').controller('hotelCtrl', function ($scope, $http) {
 	}
 
 	$scope.fetchPlaceList = function () {
-		var getPleaceURL = '/' + $.param({ action: 'get-hotel' });
+		var getPleaceURL = '/' + $.param({ action: 'get-tourism3' });
 		// Make a request
 		apiCall(getPleaceURL, 'POST').then(
 			function (response) {
