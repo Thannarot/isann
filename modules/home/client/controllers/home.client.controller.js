@@ -74,7 +74,7 @@ angular.module('core').controller('homeCtrl', function ($scope, $http) {
     if (dots.length) dots[slideIndex - 1].classList.add("active");
   
     // Call again after 10s
-    setTimeout(showSlides, 100);
+    setTimeout(showSlides, 10000);
   }
 
   fetchImages();
