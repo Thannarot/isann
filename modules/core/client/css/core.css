@@ -253,3 +253,10 @@ a:hover .header-profile-image {
 .thumbnail:hover {
   transform: scale(1.05);
 }
+
+
+.pager { display:flex; gap:8px; align-items:center; justify-content:center; margin-bottom:150px; }
+.pager-btn { padding:6px 10px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+.pager-btn.active { font-weight:700; border-color:#333; }
+.pager-btn[disabled] { opacity:0.5; cursor:not-allowed; }
+.pager-ellipsis { padding:0 6px; color:#777; }

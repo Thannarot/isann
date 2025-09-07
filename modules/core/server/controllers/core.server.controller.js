@@ -96,7 +96,7 @@ exports.getTourism = function (req, res) {
 
 exports.getTourism2 = function (req, res) {
 
-	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงสุขภาพเชิงการแพทย์';`)
+	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงส่งเสริมสุขภาพ';`)
 		.then(data => {
 			// success
 			res.setHeader("Content-Type", "application/json");
@@ -110,7 +110,7 @@ exports.getTourism2 = function (req, res) {
 
 exports.getTourism3 = function (req, res) {
 
-	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงส่งเสริมสุขภาพ';`)
+	db.any(`SELECT p.*, pt.* FROM ela_places AS p JOIN ela_placetypes AS pt ON p.tid = pt.tid WHERE pt."group" = 'การท่องเที่ยวเชิงการแพทย์';`)
 		.then(data => {
 			// success
 			res.setHeader("Content-Type", "application/json");

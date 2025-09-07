@@ -1,88 +1,73 @@
 <div ui-view="nav"></div>
 
-<section class="map-section" ng-controller="travelCtrl" >
+<section class="map-section" ng-controller="travelCtrl">
+  <!-- LEFT FILTER PANEL -->
+  <div id="menuSidenav" class="sidenavTravel sidenav-left" ng-class="{ 'sidenav-open': isSidenavOpen }">
+
+    <a href="javascript:void(0)" id="menu-close-btn" class="closebtn" ng-click="toggleSidenav(false)">&times;</a>
+
+    <div class="searching-form">
+      <div class="form-group">
+        <label>ชื่อสถานที่</label>
+        <input type="text" class="form-control" id="pname" placeholder="พิมพ์ชื่อสถานที่" ng-model="filters.name">
+      </div>
+
+      <div class="form-group">
+        <label>จังหวัด</label>
+        <select class="form-control" id="province_selector" ng-model="filters.province"
+          ng-options="p for p in provinces" ng-change="onProvinceChange()">
+          <option value="">ทั้งหมด</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>อำเภอ</label>
+        <select class="form-control" id="city_selector" ng-model="filters.city" ng-options="c for c in cities"
+          ng-change="onCityChange()">
+          <option value="">ทั้งหมด</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>ตำบล</label>
+        <select class="form-control" id="township_selector" ng-model="filters.township"
+          ng-options="t for t in townships">
+          <option value="">ทั้งหมด</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>ประเภทของสถานที่</label>
+        <select class="form-control" id="ptype_selector" ng-model="filters.ptype"
+          ng-options="type.value as type.label for type in placeTypes">
+          <option value="9999">ทั้งหมด</option>
+        </select>
+      </div>
+
+      <input type="text" id="geo-lat" ng-model="filters.lat" hidden />
+      <input type="text" id="geo-lng" ng-model="filters.lng" hidden />
+
+      <hr>
+      <button type="button" id="filter-btn" class="btn btn-primary" ng-click="applyFilters()">ค้นหาสถานที่</button>
+      <button type="button" id="filter-all-btn" class="btn btn-secondary" style="float:right;"
+        ng-click="clearFilters()">แสดงทั้งหมด</button>
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+
+  <!-- MAP + OPEN PANEL BUTTON -->
   <div id="map">
+    <button id="menuOpenBtn" class="sidenav-open-btn" ng-click="toggleSidenav(true)">☰ ค้นหา/กรอง</button>
+
     <button id="planTripBtn">วางแผนการเดินทาง</button>
 
-    <!-- Destination List Overlay -->
     <div class="destination-list" ng-if="trustedDestinationsHtml">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="margin: 0;">จุดหมายที่เลือก</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="margin:0;">จุดหมายที่เลือก</h3>
         <button class="clear-btn" ng-click="clearDestinations()">ล้างรายการ</button>
       </div>
       <div ng-bind-html="trustedDestinationsHtml"></div>
     </div>
-
-    <!-- <div class="control-layer map-component" style="left: 20px;">
-      <div class="scalebar-container"></div>
-      <ul>
-        <li class="pointer" id="waterfall" data-layer-id="waterfall" data-file="/data/waterfall_isaan.geojson" data-color="#007cbf">
-          <span class="marker-color" style="background-color: #007cbf;"></span>
-          <span>น้ำตก</span>
-        </li>
-        <li class="pointer" id="temple" data-layer-id="temple" data-file="/data/temple_isaan.geojson" data-color="#bc9e09">
-          <span class="marker-color" style="background-color: #bc9e09;"></span>
-          <span>วัด</span>
-        </li>
-        <li class="pointer" id="samnaksong" data-layer-id="samnaksong" data-file="/data/samnaksong_isaan.geojson" data-color="#bfb500">
-          <span class="marker-color" style="background-color: #bfb500;"></span>
-          <span>สำนักสงฆ์</span>
-        </li>
-        <li class="pointer" id="mountain" data-layer-id="mountain" data-file="/data/mountain_isaan.geojson" data-color="#83bf00">
-          <span class="marker-color" style="background-color: #83bf00;"></span>
-          <span>ภูเขา</span>
-        </li>
-        <li class="pointer" id="temple" data-layer-id="temple" data-file="/data/temple_isaan.geojson" data-color="#35d38c">
-          <span class="marker-color" style="background-color: #35d38c;"></span>
-          <span>มัสยิด</span>
-        </li>
-        <li class="pointer" id="lake" data-layer-id="lake" data-file="/data/lake_isaan.geojson" data-color="#00bfaf">
-          <span class="marker-color" style="background-color: #00bfaf;"></span>
-          <span>ทะเลสาบ</span>
-        </li>
-        <li class="pointer" id="keang" data-layer-id="keang" data-file="/data/keang_isaan.geojson" data-color="#0a21b9">
-          <span class="marker-color" style="background-color: #0a21b9;"></span>
-          <span>แก่ง</span>
-        </li>
-        <li class="pointer" id="hotspring" data-layer-id="hotspring" data-file="/data/hotspring_isaan.geojson" data-color="#194e6b">
-          <span class="marker-color" style="background-color: #194e6b;"></span>
-          <span>น้ำพุร้อน</span>
-        </li>
-        <li class="pointer" id="hotel" data-layer-id="hotel" data-file="/data/hotel_isaan.geojson" data-color="#8775d9">
-          <span class="marker-color" style="background-color: #8775d9;"></span>
-          <span>โรงแรม</span>
-        </li>
-        <li class="pointer" id="hospital" data-layer-id="hospital" data-file="/data/hospital_isaan.geojson" data-color="#bb98dd">
-          <span class="marker-color" style="background-color: #bb98dd;"></span>
-          <span>โรงพยาบาล</span>
-        </li>
-        <li class="pointer" id="healthcare" data-layer-id="healthcare" data-file="/data/healthcare_isaan.geojson" data-color="#c3a8ea">
-          <span class="marker-color" style="background-color: #c3a8ea;"></span>
-          <span>ศูนย์สุขภาพ</span>
-        </li>
-        <li class="pointer" id="dam" data-layer-id="dam" data-file="/data/dam_isaan.geojson" data-color="#5e0748">
-          <span class="marker-color" style="background-color: #5e0748;"></span>
-          <span>เขื่อน</span>
-        </li>
-        <li class="pointer" id="church" data-layer-id="church" data-file="/data/church_isaan.geojson" data-color="#cd44e9">
-          <span class="marker-color" style="background-color: #cd44e9;"></span>
-          <span>โบสถ์คริสต์</span>
-        </li>
-        <li class="pointer" id="chedi" data-layer-id="chedi" data-file="/data/chedi_isaan.geojson" data-color="#bf0053">
-          <span class="marker-color" style="background-color: #bf0053;"></span>
-          <span>Chedi</span>
-        </li>
-        <li class="pointer" id="cave" data-layer-id="cave" data-file="/data/cave_isaan.geojson" data-color="#6e0327">
-          <span class="marker-color" style="background-color: #6e0327;"></span>
-          <span>ถ้ำ</span>
-        </li>
-        <li class="pointer" id="ิbeach" data-layer-id="ิbeach" data-file="/data/beach_isaan.geojson" data-color="#ff87c7">
-          <span class="marker-color" style="background-color: #ff87c7;"></span>
-          <span>ชายหาด</span>
-        </li>
-      </ul>
-    </div> -->
-    
   </div>
 </section>
 
