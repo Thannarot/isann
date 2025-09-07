@@ -6,6 +6,7 @@ angular.module('core').controller('homeCtrl', function ($scope, $http) {
 
   let slideIndex = 0;
   let slides = [];
+  const dots = document.getElementsByClassName("dot");
 
   // Helper function to extract photo ID and build display URL
   function transformDriveUrl(url) {
