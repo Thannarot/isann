@@ -49,15 +49,31 @@ angular.module('core').controller('homeCtrl', function ($scope, $http) {
     slides = document.getElementsByClassName("mySlides");
   }
 
+
   function showSlides() {
     if (!slides.length) return;
+  
+    // Hide all slides
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
     }
+  
+    // Remove active class from all dots
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove("active");
+    }
+  
+    // Increment slide index
     slideIndex++;
-    if (slideIndex > slides.length) { slideIndex = 1 }
+    if (slideIndex > slides.length) slideIndex = 1;
+  
+    // Show the current slide + activate dot
     slides[slideIndex - 1].style.display = "block";
-    $timeout(showSlides, 10000); // every 10 seconds
+    slides[slideIndex - 1].classList.add("fade");
+    if (dots.length) dots[slideIndex - 1].classList.add("active");
+  
+    // Call again after 10s
+    setTimeout(showSlides, 10000);
   }
 
   fetchImages();
