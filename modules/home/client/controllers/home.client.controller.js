@@ -4,46 +4,61 @@
 
 angular.module('core').controller('homeCtrl', function ($scope, $http) {
 
-    let slideIndex = 0;
-    let slides = [];
-  
-    function fetchImages() {
-      $http.post('/get-home-imgs', {}).then(function (res) {
-        const imageList = res.data;
-        renderSlides(imageList);
-        showSlides();
-      }, function (err) {
-        console.error('Error fetching images:', err);
-      });
-    }
-  
-    function renderSlides(images) {
-      const slideshowContainer = document.getElementById('slideshow');
-      slideshowContainer.innerHTML = ''; // Clear existing slides
-  
-      images.forEach((img, index) => {
-        const slideDiv = document.createElement('div');
-        slideDiv.className = 'mySlides fade';
-        slideDiv.innerHTML = `
-          <div class="numbertext">${index + 1} / ${images.length}</div>
-          <img src="${img.link}" style="width:100%">
-        `;
-        slideshowContainer.appendChild(slideDiv);
-      });
-  
-      slides = document.getElementsByClassName("mySlides");
-    }
-  
-    function showSlides() {
-      if (!slides.length) return;
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+  let slideIndex = 0;
+  let slides = [];
+
+  // Helper function to extract photo ID and build display URL
+  function transformDriveUrl(url) {
+    try {
+      const idMatch = url.match(/id=([^&]+)/);
+      if (idMatch && idMatch[1]) {
+        return `https://lh3.googleusercontent.com/d/${idMatch[1]}=s2580`;
       }
-      slideIndex++;
-      if (slideIndex > slides.length) { slideIndex = 1 }
-      slides[slideIndex - 1].style.display = "block";
-      $timeout(showSlides, 10000); // every 10 seconds
+    } catch (e) {
+      console.warn('Invalid photo URL:', url);
     }
-  
-    fetchImages();
+    return ''; // fallback
+  }
+
+
+
+  function fetchImages() {
+    $http.post('/get-home-imgs', {}).then(function (res) {
+      const imageList = res.data;
+      renderSlides(imageList);
+      showSlides();
+    }, function (err) {
+      console.error('Error fetching images:', err);
+    });
+  }
+
+  function renderSlides(images) {
+    const slideshowContainer = document.getElementById('slideshow');
+    slideshowContainer.innerHTML = ''; // Clear existing slides
+
+    images.forEach((img, index) => {
+      const slideDiv = document.createElement('div');
+      slideDiv.className = 'mySlides fade';
+      slideDiv.innerHTML = `
+          <div class="numbertext">${index + 1} / ${images.length}</div>
+          <img src="${transformDriveUrl(img.link)}" style="width:100%">
+        `;
+      slideshowContainer.appendChild(slideDiv);
+    });
+
+    slides = document.getElementsByClassName("mySlides");
+  }
+
+  function showSlides() {
+    if (!slides.length) return;
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1 }
+    slides[slideIndex - 1].style.display = "block";
+    $timeout(showSlides, 10000); // every 10 seconds
+  }
+
+  fetchImages();
 });
