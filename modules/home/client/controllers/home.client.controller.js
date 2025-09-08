@@ -7,6 +7,7 @@ angular.module('core').controller('homeCtrl', function ($scope, $http) {
   let slideIndex = 0;
   let slides = [];
   const dots = document.getElementsByClassName("dot");
+  const intervalMs = 10000;
 
   // Helper function to extract photo ID and build display URL
   function transformDriveUrl(url) {
@@ -49,33 +50,54 @@ angular.module('core').controller('homeCtrl', function ($scope, $http) {
 
     slides = document.getElementsByClassName("mySlides");
   }
-
-
+  function setActive(index) {
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].classList.toggle("is-active", i === index);
+    }
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle("active", i === index);
+    }
+  }
+  
   function showSlides() {
     if (!slides.length) return;
   
-    // Hide all slides
-    for (let i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
+    // Next index (wrap around)
+    slideIndex = (slideIndex + 1) % slides.length;
   
-    // Remove active class from all dots
-    for (let i = 0; i < dots.length; i++) {
-      dots[i].classList.remove("active");
-    }
+    // Cross-fade instead of hide/show
+    setActive(slideIndex);
   
-    // Increment slide index
-    slideIndex++;
-    if (slideIndex > slides.length) slideIndex = 1;
-  
-    // Show the current slide + activate dot
-    slides[slideIndex - 1].style.display = "block";
-    slides[slideIndex - 1].classList.add("fade");
-    if (dots.length) dots[slideIndex - 1].classList.add("active");
-  
-    // Call again after 10s
-    setTimeout(showSlides, 10000);
+    setTimeout(showSlides, intervalMs);
   }
+  
+  // Optional: start once first images are cached to avoid initial flash
+  (function preloadAndStart() {
+    if (!slides.length) return;
+    // Make the first slide visible immediately
+    setActive(0);
+  
+    // Preload remaining images, then start rotation
+    const imgs = Array.from(slides)
+      .map(s => s.querySelector("img"))
+      .filter(Boolean);
+  
+    let loaded = 0;
+    const total = imgs.length;
+    imgs.forEach(img => {
+      if (img.complete) {
+        if (++loaded === total) setTimeout(showSlides, intervalMs);
+      } else {
+        img.addEventListener("load", () => {
+          if (++loaded === total) setTimeout(showSlides, intervalMs);
+        }, { once: true });
+        img.addEventListener("error", () => {
+          if (++loaded === total) setTimeout(showSlides, intervalMs);
+        }, { once: true });
+      }
+    });
+  })();
+  
 
   fetchImages();
 });
